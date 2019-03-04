@@ -46,9 +46,35 @@ public:
     QString lastError() const { return _lastError; }
     static QString md5(const QString &data);
     static QByteArray md5Bytes(const QString &data);
+    //
     static quint8 crc8_Dallas(const QVector<quint8> &data);
     static quint8 crc8_Dallas(const QByteArray &data);
     static quint8 crc8_Dallas(const quint8 *data, qint32 size);
+    //
+    static quint8 crc8(const QVector<quint8> &data);
+    static quint8 crc8(const QByteArray &data);
+    static quint8 crc8(const quint8 *data, qint32 size);
+    //
+    static quint16 crc16_Ccitt(const QVector<quint8> &data);
+    static quint16 crc16_Ccitt(const QByteArray &data);
+    static quint16 crc16_Ccitt(const quint8 *data, qint32 size);
+    //
+    static quint16 crc16(const QVector<quint8> &data);
+    static quint16 crc16(const QByteArray &data);
+    static quint16 crc16(const quint8 *data, qint32 size);
+    static quint16 crc16_Restore(quint16 needCRC, quint16 newCRC);
+    //
+    static quint16 crc16_Arc(const QVector<quint8> &data);
+    static quint16 crc16_Arc(const QByteArray &data);
+    static quint16 crc16_Arc(const quint8 *data, qint32 size);
+    //
+    static quint16 crc16_Wmbus(const QVector<quint8> &data);
+    static quint16 crc16_Wmbus(const QByteArray &data);
+    static quint16 crc16_Wmbus(const quint8 *data, qint32 size);
+    //
+    static quint32 crc32(const QVector<quint8> &data);
+    static quint32 crc32(const QByteArray &data);
+    static quint32 crc32(const quint8 *data, qint32 size);
 
 protected:
     QString _lastError {""};
