@@ -100,7 +100,6 @@ public:
     static quint64 strToIntDef(const QString &str, quint64 def);
     static QString doubleToStr(double val, int precise = 2);
     static double strToDouble(const QString &str, bool *ok = Q_NULLPTR );
-    static QString updatePrecise(const QString &val, int precise = 2);
     static QDateTime strToDateTime(const QString &str);
     static quint8  lo(quint16 val);
     static quint16 lo(quint32 val);
@@ -117,7 +116,7 @@ public:
     static QString endLineToHTML(const QString &str);
     static QString encodeXMLText(const QString &text);
     static QString decodeXMLText(const QString &text);
-    static QString changeDecimalSeparator(const QString &str);
+    static QString changeDecimalSeparator(const QString &str, QChar separator = QChar('\0'));
     static QString changeLineFit(const QString &str, const QString &lineFit);
     //
     Convert() = delete;

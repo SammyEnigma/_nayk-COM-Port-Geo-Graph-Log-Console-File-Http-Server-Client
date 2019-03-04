@@ -48,45 +48,29 @@ bool Convert::isASCII(char val)
 //=======================================================================================================
 quint8 Convert::bcdEncode(qint8 value)
 {
-    QString s = "";
-    if(value < 0) {
-        s += "F";
-        value = 0-value;
-    }
-    s += QString::number(value);
+    QString s = (value < 0) ? "F" : "";
+    s += QString::number( qAbs(value) );
     return static_cast<quint8>( s.toUInt(nullptr, 16) );
 }
 //=======================================================================================================
 quint16 Convert::bcdEncode(qint16 value)
 {
-    QString s = "";
-    if(value < 0) {
-        s += "F";
-        value = 0-value;
-    }
-    s += QString::number(value);
+    QString s = (value < 0) ? "F" : "";
+    s += QString::number( qAbs(value) );
     return static_cast<quint16>( s.toUInt(nullptr, 16) );
 }
 //=======================================================================================================
 quint32 Convert::bcdEncode(qint32 value)
 {
-    QString s = "";
-    if(value < 0) {
-        s += "F";
-        value = 0-value;
-    }
-    s += QString::number(value);
+    QString s = (value < 0) ? "F" : "";
+    s += QString::number( qAbs(value) );
     return static_cast<quint32>( s.toULong(nullptr, 16) );
 }
 //=======================================================================================================
 quint64 Convert::bcdEncode(qint64 value)
 {
-    QString s = "";
-    if(value < 0) {
-        s += "F";
-        value = 0-value;
-    }
-    s += QString::number(value);
+    QString s = (value < 0) ? "F" : "";
+    s += QString::number( qAbs(value) );
     return static_cast<quint64>( s.toULongLong(nullptr, 16) );
 }
 //=======================================================================================================
@@ -117,6 +101,7 @@ quint64 Convert::bcdEncode(quint64 value)
 qint8 Convert::bcdDecode(quint8 bcdValue, bool *ok)
 {
     QString s = intToHex( bcdValue, 2, false );
+    while( (s.length() > 1) && (s.left(1) == "0")) s.remove(0,1);
     if(s.left(1).toUpper() == "F") s[0] = QChar('-');
     return static_cast<qint8>(s.toInt(ok, 10));
 }
@@ -124,6 +109,7 @@ qint8 Convert::bcdDecode(quint8 bcdValue, bool *ok)
 qint16 Convert::bcdDecode(quint16 bcdValue, bool *ok)
 {
     QString s = intToHex( bcdValue, 4, false );
+    while( (s.length() > 1) && (s.left(1) == "0")) s.remove(0,1);
     if(s.left(1).toUpper() == "F") s[0] = QChar('-');
     return static_cast<qint16>(s.toInt(ok, 10));
 }
@@ -131,6 +117,7 @@ qint16 Convert::bcdDecode(quint16 bcdValue, bool *ok)
 qint32 Convert::bcdDecode(quint32 bcdValue, bool *ok)
 {
     QString s = intToHex( bcdValue, 8, false );
+    while( (s.length() > 1) && (s.left(1) == "0")) s.remove(0,1);
     if(s.left(1).toUpper() == "F") s[0] = QChar('-');
     return static_cast<qint32>(s.toLong(ok, 10));
 }
@@ -138,6 +125,7 @@ qint32 Convert::bcdDecode(quint32 bcdValue, bool *ok)
 qint64 Convert::bcdDecode(quint64 bcdValue, bool *ok)
 {
     QString s = intToHex( bcdValue, 16, false );
+    while( (s.length() > 1) && (s.left(1) == "0")) s.remove(0,1);
     if(s.left(1).toUpper() == "F") s[0] = QChar('-');
     return static_cast<qint64>(s.toLongLong(ok, 10));
 }
@@ -410,6 +398,7 @@ QDateTime Convert::strToDateTime(const QString &str)
 {
     QString dtStr = str.trimmed();
     QStringList lst = dtStr.split(' ', QString::SkipEmptyParts);
+    if(lst.size() != 2) lst = dtStr.split('T', QString::SkipEmptyParts);
     if(lst.size() != 2) return QDateTime::fromMSecsSinceEpoch(-1);
 
     int y=0, m=0, d=0, h=0, n=0, s=0;
@@ -438,51 +427,6 @@ QDateTime Convert::strToDateTime(const QString &str)
     if(tmLst.size() > 2) s = strToIntDef(tmLst.at(2), -1);
 
     return QDateTime( QDate(y, m, d), QTime(h, n, s) );
-}
-//=======================================================================================================
-QString Convert::updatePrecise(const QString &val, int precise)
-{
-    QString str = val;
-    QString znak = "";
-    if(str[0] == '-') {
-        znak = "-";
-        str.remove(0,1);
-    }
-
-    if(precise < 0) {
-
-        precise = 0 - precise;
-        int n = str.indexOf(',');
-        if(n >= 0) str[n] = '.';
-        n = str.indexOf('.');
-        QString s1 = "";
-        if(n >= 0) {
-            s1 = str.right( str.length() - n - 1 );
-            str = str.left(n);
-        }
-
-        while(s1.length() < precise) s1 += "0";
-        s1 = s1.left(precise);
-        str += s1;
-        while( !str.isEmpty() && (str.left(1) == "0") ) str.remove(0,1);
-        if(str.isEmpty()) str = "0";
-    }
-    else if(precise > 0) {
-
-        while (str.length() < precise) str = "0" + str;
-
-        QString s1 = str.right(precise);
-        str.remove(str.length()-precise, precise );
-
-        while( !str.isEmpty() && (str.left(1) == "0") ) str.remove(0,1);
-        if(str.isEmpty()) str = "0";
-
-        while( !s1.isEmpty() && (s1.right(1) == "0") ) s1.remove( s1.length()-1, 1 );
-
-        if(!s1.isEmpty()) str += "." + s1;
-
-    }
-    return znak + str;
 }
 //====================================================================================================
 QString Convert::encodeXMLText(const QString &text)
@@ -520,18 +464,26 @@ QString Convert::decodeXMLText(const QString &text)
     return res;
 }
 //====================================================================================================
-QString Convert::changeDecimalSeparator(const QString &str)
+QString Convert::changeDecimalSeparator(const QString &str, QChar separator)
 {
-    bool ok;
     QString res = str;
-    double d = strToDouble(res.trimmed(), &ok);
-    Q_UNUSED(d);
-    if(ok) {
+    QChar sep = '.';
+    QChar repSep = ',';
+
+    if(separator.isNull()) {
+
         QLocale c;
-        QChar separator = c.toString( 0.1 ).at(1);
-        QChar repSep = (separator == '.') ? ',' : '.';
-        res.replace(repSep, separator);
+        QString sVal = c.toString( 0.1 );
+        if(sVal.contains(',')) {
+            sep = ',';
+            repSep = '.';
+        }
     }
+    else {
+        if(res.contains('.')) repSep = '.';
+        sep = separator;
+    }
+    res.replace(repSep, sep);
     return res;
 }
 //=====================================================================================================
