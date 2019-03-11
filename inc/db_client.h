@@ -65,6 +65,7 @@ public:
     quint16 port() { return _port; }
     QSqlDatabase db() { return QSqlDatabase::database(_connectionName, false); }
     bool execSQL(const QString &sqlText, QSqlQuery *query, bool withTransaction = false);
+    bool execSQL(const QString &sqlText);
     bool tableExist(const QString &tableName) { return isOpen() && db().tables().contains( tableName ); }
     bool getTables(QStringList *list);
     bool getTableFields(const QString &tableName, QStringList *list);

@@ -154,6 +154,12 @@ bool DBClient::isOpen()
     return (db().isValid() && db().isOpen());
 }
 //=======================================================================================================
+bool DBClient::execSQL(const QString &sqlText)
+{
+    QSqlQuery query(db());
+    return execSQL(sqlText, &query, true);
+}
+//=======================================================================================================
 bool DBClient::execSQL(const QString &sqlText, QSqlQuery *query, bool withTransaction)
 {
     if(!isOpen()) {
