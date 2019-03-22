@@ -82,6 +82,7 @@ const QString ServerHeaderServerSoftware      = "SERVER_SOFTWARE";
 const QString ServerHeaderContentType         = "CONTENT_TYPE";
 const QString ServerHeaderContentLength       = "CONTENT_LENGTH";
 const QString ServerHeaderContextPrefix       = "CONTEXT_PREFIX";
+const QString ServerHeaderOrigin              = "ORIGIN";
 //
 const QString MethodDelete                    = "DELETE";
 const QString MethodGet                       = "GET";
