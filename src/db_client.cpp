@@ -149,9 +149,9 @@ bool DBClient::close()
     return true;
 }
 //=======================================================================================================
-bool DBClient::isOpen()
+bool DBClient::isOpen(bool reconnect)
 {
-    return (db().isValid() && db().isOpen());
+    return QSqlDatabase::database(_connectionName, reconnect).isOpen();
 }
 //=======================================================================================================
 bool DBClient::execSQL(const QString &sqlText)
@@ -180,6 +180,7 @@ bool DBClient::execSQL(const QString &sqlText, QSqlQuery *query, bool withTransa
     if(!query->exec(sqlText)) {
         _lastError = tr("Ошибка выполнения SQL запроса: %1").arg(query->lastError().text());
         if(withTransaction) dataBase.rollback();
+        emit toLog(LogDbg, "SQL: " + sqlText);
         emit toLog(LogError, _lastError);
         return false;
     }

@@ -53,7 +53,7 @@ public:
     bool writeSettings(const QString &settingsFileName = QString());
     bool open(bool reconnect = false);
     bool close();
-    bool isOpen();
+    bool isOpen(bool reconnect = false);
 
     const QString& lastError() { return _lastError; }
     const QString& settingsFileName() { return _settingsFileName; }
