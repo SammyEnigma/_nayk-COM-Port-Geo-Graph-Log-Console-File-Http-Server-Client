@@ -73,3 +73,4 @@ contains( QT, charts ) {
 unix:BUILD_DATE = '$(shell date +%Y-%m-%d)'
 win32:BUILD_DATE = '$(shell echo %DATE:~6,4%-%DATE:~3,2%-%DATE:~0,2%)'
 DEFINES += APP_BUILD_DATE=\\\"$$BUILD_DATE\\\"
+

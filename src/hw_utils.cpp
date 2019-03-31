@@ -33,6 +33,8 @@
 #include <sys/times.h>
 #include <unistd.h>
 #include <time.h>
+#else
+#include <windows.h>
 #endif
 
 #include "system_utils.h"
@@ -40,10 +42,63 @@
 
 namespace nayk {
 //=======================================================================================================
-#ifdef Q_OS_LINUX
 typedef struct proc_info_t {
     qreal usage[16];
 } proc_info_t;
+//=======================================================================================================
+int getProcessorLoad(proc_info_t *info)
+{
+    int count = 0;
+#ifdef Q_OS_LINUX
+
+    static unsigned int pre_total[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, pre_used[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    unsigned int cpu[16], nice[16], system[16], idle[16];
+
+    FILE *fp;
+    if (!(fp = fopen("/proc/stat", "r"))) {
+        return 0;
+    }
+
+    int count = 0;
+    char name[1024];
+    while(fgets(name, sizeof(name)-1, fp) && count<16) {
+        if((name[0] != 'c') || (name[1] != 'p') || (name[2] != 'u')) break;
+        sscanf(name, "%*s %u %u %u %u", &cpu[count], &nice[count], &system[count], &idle[count]);
+        count++;
+    }
+    fclose(fp);
+
+    unsigned int used[16];
+    unsigned int total[16];
+    for(int k = 0; k < count; k++) {
+        used[k] = cpu[k] + system[k] + nice[k];
+        total[k] = cpu[k] + nice[k] + system[k] + idle[k];
+    }
+
+    for(int k = 0; k < count; k++) {
+        if((pre_total[k] == 0)||(pre_used[k] == 0)) {
+            info->usage[k] = 0.0;
+        }
+        else {
+            info->usage[k] = ((100.0 * static_cast<qreal>(used[k] - pre_used[k]))/static_cast<qreal>((total[k] - pre_total[k])));
+        }
+
+        pre_used[k] = used[k];
+        pre_total[k] = total[k];
+    }
+
+#else
+    count = HW::cpuCount();
+    for(int k = 0; k < count; k++) {
+        info->usage[k] = 0.0;
+    }
+#endif
+    return count;
+}
+//=======================================================================================================
+
+#ifdef Q_OS_LINUX
+
 //=======================================================================================================
 bool getDiskIOLoad(const QString &dev, double &io)
 {
@@ -164,7 +219,6 @@ int HW::cpuCount()
 bool HW::cpuLoadPercent(QVector<qreal> &vecLoad, quint8 intervalMS)
 {
     vecLoad.clear();
-#ifdef Q_OS_LINUX
     proc_info_t info;
     int load = getProcessorLoad(&info);
     if(intervalMS > 0) {
@@ -172,9 +226,7 @@ bool HW::cpuLoadPercent(QVector<qreal> &vecLoad, quint8 intervalMS)
         load = getProcessorLoad(&info);
     }
     for(int i=0; i<load; ++i) vecLoad.append( info.usage[i] );
-#else
-    Q_UNUSED(intervalMS);
-#endif
+
     return true;
 }
 //=======================================================================================================
