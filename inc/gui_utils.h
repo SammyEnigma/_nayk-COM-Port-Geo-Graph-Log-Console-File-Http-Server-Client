@@ -44,6 +44,7 @@ public:
     static void resizeTableToContents(QTableWidget *table);
     static void swapTableRows(QTableWidget *table, int row1, int row2);
     static void copyTableToClipboard(QTableWidget *table);
+    static bool searchTextInTable(QTableWidget *table, const QString &searchText);
     static void msgError(const QString &txt);
     static void msgWarning(const QString &txt);
     static void msgInfo(const QString &txt);

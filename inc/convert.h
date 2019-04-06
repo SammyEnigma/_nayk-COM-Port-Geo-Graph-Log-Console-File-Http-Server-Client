@@ -99,8 +99,9 @@ public:
     static qint64 strToIntDef(const QString &str, qint64 def);
     static quint64 strToIntDef(const QString &str, quint64 def);
     static QString doubleToStr(double val, int precise = 2);
-    static double strToDouble(const QString &str, bool *ok = Q_NULLPTR );
+    static double strToDouble(const QString &str, bool *ok = nullptr );
     static QDateTime strToDateTime(const QString &str);
+    static QString updatePrecise(const QString &val, int precise = 2);
     static quint8  lo(quint16 val);
     static quint16 lo(quint32 val);
     static quint32 lo(quint64 val);

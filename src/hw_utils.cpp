@@ -33,7 +33,9 @@
 #include <sys/times.h>
 #include <unistd.h>
 #include <time.h>
-#else
+#endif
+
+#ifdef Q_OS_WIN
 #include <windows.h>
 #endif
 
@@ -45,12 +47,50 @@ namespace nayk {
 typedef struct proc_info_t {
     qreal usage[16];
 } proc_info_t;
+
 //=======================================================================================================
+#ifdef Q_OS_WIN
+static double CalculateCPULoad(unsigned long long idleTicks, unsigned long long totalTicks)
+{
+   static unsigned long long _previousTotalTicks = 0;
+   static unsigned long long _previousIdleTicks = 0;
+
+   unsigned long long totalTicksSinceLastTime = totalTicks-_previousTotalTicks;
+   unsigned long long idleTicksSinceLastTime  = idleTicks-_previousIdleTicks;
+
+   double ret = 1.0 - ((totalTicksSinceLastTime > 0) ? (static_cast<double>(idleTicksSinceLastTime))/totalTicksSinceLastTime : 0);
+
+   _previousTotalTicks = totalTicks;
+   _previousIdleTicks  = idleTicks;
+   return ret;
+}
+
+static unsigned long long FileTimeToInt64(const FILETIME &ft)
+{
+    return ((static_cast<unsigned long long>(ft.dwHighDateTime))<<32) | (static_cast<unsigned long long>(ft.dwLowDateTime));
+}
+
+// Returns 1.0f for "CPU fully pinned", 0.0f for "CPU idle", or somewhere in between
+// You'll need to call this at regular intervals, since it measures the load between
+// the previous call and the current one.  Returns -1.0 on error.
+int getProcessorLoad(proc_info_t *info)
+{
+    int count = 1;
+    for(int k = 0; k < 16; k++) {
+        info->usage[k] = 0.0;
+    }
+    FILETIME idleTime, kernelTime, userTime;
+    info->usage[0] = GetSystemTimes(&idleTime, &kernelTime, &userTime) ?
+                CalculateCPULoad(FileTimeToInt64(idleTime), FileTimeToInt64(kernelTime)+FileTimeToInt64(userTime))
+              : -1.0;
+    return count;
+}
+#endif
+//=======================================================================================================
+#ifdef Q_OS_LINUX
 int getProcessorLoad(proc_info_t *info)
 {
     int count = 0;
-#ifdef Q_OS_LINUX
-
     static unsigned int pre_total[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, pre_used[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     unsigned int cpu[16], nice[16], system[16], idle[16];
 
@@ -87,19 +127,11 @@ int getProcessorLoad(proc_info_t *info)
         pre_total[k] = total[k];
     }
 
-#else
-    count = HW::cpuCount();
-    for(int k = 0; k < count; k++) {
-        info->usage[k] = 0.0;
-    }
-#endif
     return count;
 }
+#endif
 //=======================================================================================================
-
 #ifdef Q_OS_LINUX
-
-//=======================================================================================================
 bool getDiskIOLoad(const QString &dev, double &io)
 {
     FILE *fp;

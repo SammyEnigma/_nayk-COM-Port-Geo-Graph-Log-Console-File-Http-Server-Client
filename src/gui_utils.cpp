@@ -49,6 +49,46 @@
 
 namespace nayk {
 //===================================================================================================
+bool Gui::searchTextInTable(QTableWidget *table, const QString &searchText)
+{
+    if((table->rowCount()<1) || (table->columnCount()<1) ||
+            (searchText.isNull()) || (searchText.isEmpty())) return false;
+
+    int curRow = table->currentRow();
+    int curCol = table->currentColumn();
+
+    if(curRow < 0) curRow = 0;
+    if(curCol < 0) curCol = 0;
+
+    for(int row=curRow; row<table->rowCount(); row++) {
+        for(int col=0; col<table->columnCount(); col++) {
+            if((row==curRow) && (col<=curCol)) continue;
+
+            if(!table->isColumnHidden(col) && table->item(row, col)) {
+                QString str = table->item(row, col)->text();
+                if(str.contains(searchText, Qt::CaseInsensitive)) {
+                    table->setCurrentCell(row, col);
+                    return true;
+                }
+            }
+        }
+    }
+    for(int row=0; row<=curRow; row++) {
+        for(int col=0; col<table->columnCount(); col++) {
+            if((row==curRow) && (col>=curCol) ) break;
+
+            if(!table->isColumnHidden(col) && table->item(row, col)) {
+                QString str = table->item(row, col)->text();
+                if(str.contains(searchText, Qt::CaseInsensitive)) {
+                    table->setCurrentCell(row, col);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+//===================================================================================================
 void Gui::clearTableWidget(QTableWidget *table)
 {
     if(!table) return;
@@ -131,7 +171,7 @@ void Gui::swapTableRows(QTableWidget *table, int row1, int row2)
         }
 
         QTableWidgetItem *item1 = table->item(row1, col);
-        QTableWidgetItem *item2 = table->item(row2, col);        
+        QTableWidgetItem *item2 = table->item(row2, col);
 
         if(item1 && item2) {
             QColor cl = item1->backgroundColor();

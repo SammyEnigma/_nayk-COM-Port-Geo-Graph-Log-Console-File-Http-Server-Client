@@ -502,5 +502,50 @@ QString Convert::changeLineFit(const QString &str, const QString &lineFit)
     return res;
 }
 //==========================================================================================
+QString Convert::updatePrecise(const QString &val, int precise)
+{
+    QString str = val;
+    QString znak = "";
+    if(str[0] == '-') {
+        znak = "-";
+        str.remove(0,1);
+    }
+
+    if(precise < 0) {
+
+        precise = 0 - precise;
+        int n = str.indexOf(',');
+        if(n >= 0) str[n] = '.';
+        n = str.indexOf('.');
+        QString s1 = "";
+        if(n >= 0) {
+            s1 = str.right( str.length() - n - 1 );
+            str = str.left(n);
+        }
+
+        while(s1.length() < precise) s1 += "0";
+        s1 = s1.left(precise);
+        str += s1;
+        while( !str.isEmpty() && (str.left(1) == "0") ) str.remove(0,1);
+        if(str.isEmpty()) str = "0";
+    }
+    else if(precise > 0) {
+
+        while (str.length() < precise) str = "0" + str;
+
+        QString s1 = str.right(precise);
+        str.remove(str.length()-precise, precise );
+
+        while( !str.isEmpty() && (str.left(1) == "0") ) str.remove(0,1);
+        if(str.isEmpty()) str = "0";
+
+        while( !s1.isEmpty() && (s1.right(1) == "0") ) s1.remove( s1.length()-1, 1 );
+
+        if(!s1.isEmpty()) str += "." + s1;
+
+    }
+    return znak + str;
+}
+//==========================================================================================
 } // namespace nayk
 
