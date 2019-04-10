@@ -95,7 +95,9 @@ Highlighter::Highlighter(QTextDocument *parent, HighlightSyntax syntax, bool dar
         break;
     case SyntaxSQL:
         keywordPatterns << "\\bselect\\b" << "\\bSELECT\\b" << "\\binsert\\b" << "\\bINSERT\\b"
-                        << "\\btable\\b" << "\\bTABLE\\b" << "\\bdrop\\b" << "\\bDROP\\b"
+                        << "\\balter\\b" << "\\bALTER\\b" << "\\bis\\b" << "\\bIS\\b" << "\\create\\b" << "\\bCREATE\\b"
+                        << "\\badd\\b" << "\\bADD\\b" << "\\bcolumn\\b" << "\\bCOLUMN\\b"
+                        << "\\btable\\b" << "\\bTABLE\\b" << "\\bdrop\\b" << "\\bDROP\\b" << "\\bon\\b" << "\\bON\\b"
                         << "\\border\\b" << "\\bORDER\\b" << "\\bshow\\b" << "\\bSHOW\\b"
                         << "\\bdatabase\\b" << "\\bDATABASE\\b" << "\\bdatabases\\b" << "\\bDATABASES\\b"
                         << "\\binner\\b" << "\\bINNER\\b" << "\\bdublicate\\b" << "\\bDUBLICATE\\b"
@@ -107,7 +109,7 @@ Highlighter::Highlighter(QTextDocument *parent, HighlightSyntax syntax, bool dar
                         << "\\bbetween\\b" << "\\bBETWEEN\\b" << "\\breturning\\b" << "\\bRETURNING\\b"
                         << "\\bby\\b" << "\\bBY\\b" << "\\basc\\b" << "\\bASC\\b" << "\\bdesc\\b" << "\\bDESC\\b"
                         << "\\bleft\\b" << "\\bLEFT\\b" << "\\bright\\b" << "\\bRIGHT\\b" << "\\bjoin\\b" << "\\bJOIN\\b"
-                        << "\\blimit\\b" << "\\bLIMIT\\b" << "\\border\\b" << "\\bORDER\\b";
+                        << "\\blimit\\b" << "\\bLIMIT\\b" << "\\bouter\\b" << "\\bOUTER\\b";
         break;
     }
 
