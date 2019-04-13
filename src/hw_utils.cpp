@@ -99,7 +99,6 @@ int getProcessorLoad(proc_info_t *info)
         return 0;
     }
 
-    int count = 0;
     char name[1024];
     while(fgets(name, sizeof(name)-1, fp) && count<16) {
         if((name[0] != 'c') || (name[1] != 'p') || (name[2] != 'u')) break;
@@ -186,46 +185,6 @@ bool getNetInfo(const QString &iface, double &rxKB, double &txKB)
     }
     fclose(fp);
     return res;
-}
-//=======================================================================================================
-int getProcessorLoad(proc_info_t *info)
-{
-    static unsigned int pre_total[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, pre_used[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    unsigned int cpu[16], nice[16], system[16], idle[16];
-
-    FILE *fp;
-    if (!(fp = fopen("/proc/stat", "r"))) {
-        return 0;
-    }
-
-    int count = 0;
-    char name[1024];
-    while(fgets(name, sizeof(name)-1, fp) && count<16) {
-        if((name[0] != 'c') || (name[1] != 'p') || (name[2] != 'u')) break;
-        sscanf(name, "%*s %u %u %u %u", &cpu[count], &nice[count], &system[count], &idle[count]);
-        count++;
-    }
-    fclose(fp);
-
-    unsigned int used[16];
-    unsigned int total[16];
-    for(int k = 0; k < count; k++) {
-        used[k] = cpu[k] + system[k] + nice[k];
-        total[k] = cpu[k] + nice[k] + system[k] + idle[k];
-    }
-
-    for(int k = 0; k < count; k++) {
-        if((pre_total[k] == 0)||(pre_used[k] == 0)) {
-            info->usage[k] = 0.0;
-        }
-        else {
-            info->usage[k] = ((100.0 * static_cast<qreal>(used[k] - pre_used[k]))/static_cast<qreal>((total[k] - pre_total[k])));
-        }
-
-        pre_used[k] = used[k];
-        pre_total[k] = total[k];
-    }
-    return count;
 }
 //=======================================================================================================
 quint64 getMemValueFromStr(const QString &str)
