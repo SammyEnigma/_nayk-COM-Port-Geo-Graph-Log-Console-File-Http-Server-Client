@@ -44,8 +44,9 @@ extern char** environ;
 
 namespace nayk {
 
-const int QueryTimeOutMax = 300000;
-const int ReadTimeOutMax  = 60000;
+const int QueryTimeOutMax  = 300000;
+const int ReadTimeOutMax   = 60000;
+const qint64 MaxBufferSize = 1024;
 
 //======================================================================================================
 HttpServer::HttpServer(QObject *parent) : QObject(parent)
@@ -100,7 +101,7 @@ bool HttpServer::readRequestContent(QByteArray &buf)
 
         // засекаем текущее время:
         curMS = QDateTime::currentMSecsSinceEpoch();
-        QByteArray readBuf = standardInput.read(1024);
+        QByteArray readBuf = standardInput.read(MaxBufferSize);
         // вычисляем разницу:
         timeMS = QDateTime::currentMSecsSinceEpoch() - curMS;
         sumTime += timeMS;
@@ -109,7 +110,7 @@ bool HttpServer::readRequestContent(QByteArray &buf)
         queStr += QString::number( readBuf.size() ) + "=" + QString::number( timeMS ) + QObject::tr(" мсек");
 
         if(readBuf.isEmpty()) {
-            System::pause(20);
+            System::pauseMS(20);
             continue;
         }
 

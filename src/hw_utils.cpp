@@ -210,6 +210,7 @@ int HW::cpuCount()
 bool HW::cpuLoadPercent(QVector<qreal> &vecLoad, quint8 intervalMS)
 {
     vecLoad.clear();
+    vecLoad.squeeze();
     proc_info_t info;
     int load = getProcessorLoad(&info);
     if(intervalMS > 0) {
