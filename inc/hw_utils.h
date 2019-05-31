@@ -41,8 +41,11 @@ public:
     static bool diskInfo(const QString &dev, quint64 &sizeKB, quint64 &freeKB);
     static bool diskIOKB(const QString &dev, qreal &ioKB);
     static bool netInfo(const QString &iface, qreal &rxKB, qreal &txKB);
+    static bool getMeMemoryUsage(qint64 &pageFileUsage, qint64 &ramUsage);
+    static bool getMeMemoryUsage(qreal &pageFileUsageKB, qreal &ramUsageKB);
+    static bool getMeMemoryUsage(QString &infoStr);
     //
-    HW() = delete; 
+    HW() = delete;
 };
 
 //=========================================================================================================

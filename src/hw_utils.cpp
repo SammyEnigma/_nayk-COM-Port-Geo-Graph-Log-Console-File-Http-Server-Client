@@ -37,6 +37,7 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
+#include <psapi.h>
 #endif
 
 #include "system_utils.h"
@@ -313,5 +314,79 @@ bool HW::netInfo(const QString &iface, qreal &rxKB, qreal &txKB)
 #endif
 }
 //=======================================================================================================
+bool HW::getMeMemoryUsage(qint64 &pageFileUsage, qint64 &ramUsage)
+{
+#ifdef Q_OS_WIN
+
+    PROCESS_MEMORY_COUNTERS pmc;
+    WINBOOL res = GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+
+    if(res) {
+
+        pageFileUsage = static_cast<qint64>( pmc.PagefileUsage );
+        ramUsage = static_cast<qint64>( pmc.WorkingSetSize );
+        return true;
+    }
+
+#endif
+
+#ifdef Q_OS_LINUX
+
+#endif
+    return false;
+}
+//============================================================================================
+bool HW::getMeMemoryUsage(qreal &pageFileUsageKB, qreal &ramUsageKB)
+{
+    qint64 n1 = 0, n2 = 0;
+    if(!getMeMemoryUsage(n1, n2)) return false;
+
+    pageFileUsageKB = static_cast<qreal>(n1)  / 1024.0;
+    ramUsageKB = static_cast<qreal>(n2)  / 1024.0;
+    return true;
+}
+//============================================================================================
+bool HW::getMeMemoryUsage(QString &infoStr)
+{
+    infoStr = "";
+#ifdef Q_OS_WIN
+
+    PROCESS_MEMORY_COUNTERS pmc;
+    WINBOOL res = GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+
+    if(res) {
+
+        infoStr = QString("PageFaultCount: %1\n"
+                          "PeakWorkingSetSize: %2 B\n"
+                          "WorkingSetSize: %3 B\n"
+                          "QuotaPeakPagedPoolUsage: %4 B\n"
+                          "QuotaPagedPoolUsage: %5 B\n"
+                          "QuotaPeakNonPagedPoolUsage: %6 B\n"
+                          "QuotaNonPagedPoolUsage: %7 B\n"
+                          "PagefileUsage: %8 B\n"
+                          "PeakPagefileUsage: %9 B"
+                          )
+                .arg(static_cast<qint64>( pmc.PageFaultCount ) )
+                .arg(static_cast<qint64>( pmc.PeakWorkingSetSize ))
+                .arg(static_cast<qint64>( pmc.WorkingSetSize ))
+                .arg(static_cast<qint64>( pmc.QuotaPeakPagedPoolUsage ))
+                .arg(static_cast<qint64>( pmc.QuotaPagedPoolUsage ))
+                .arg(static_cast<qint64>( pmc.QuotaPeakNonPagedPoolUsage ))
+                .arg(static_cast<qint64>( pmc.QuotaNonPagedPoolUsage ))
+                .arg(static_cast<qint64>( pmc.PagefileUsage ))
+                .arg(static_cast<qint64>( pmc.PeakPagefileUsage ))
+                ;
+
+        return true;
+    }
+
+#endif
+
+#ifdef Q_OS_LINUX
+
+#endif
+    return false;
+}
+//============================================================================================
 } // namespace nayk
 

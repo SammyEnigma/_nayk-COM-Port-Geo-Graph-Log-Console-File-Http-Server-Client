@@ -105,13 +105,12 @@ void ComPort::on_ReadyRead()
 //=======================================================================================================
 QByteArray ComPort::readAll()
 {
-    QByteArray buf;
     if(!port.isOpen()) {
         _lastError = tr("Порт %1: Ошибка чтения - порт закрыт.").arg(port.portName());
         emit toLog(LogError, _lastError);
-        return buf;
+        return QByteArray();
     }
-    buf = port.readAll();
+    QByteArray buf = port.readAll();
     if(!buf.isEmpty()) {
         QString str = "";
         for(auto i=0; i<buf.size(); ++i) str += Convert::intToHex( static_cast<quint8>( buf.at(i) ), 2, false ) + " ";
