@@ -331,6 +331,8 @@ bool HW::getMeMemoryUsage(qint64 &pageFileUsage, qint64 &ramUsage)
 #endif
 
 #ifdef Q_OS_LINUX
+    Q_UNUSED(pageFileUsage);
+    Q_UNUSED(ramUsage);
 
 #endif
     return false;
