@@ -26,7 +26,7 @@
 #define NAYK_HTTP_CLIENT_H
 
 #include <QObject>
-#include <QtNetwork>
+#include <QtNetwork/QtNetwork>
 #include <QByteArray>
 #include <QString>
 #include <QJsonDocument>

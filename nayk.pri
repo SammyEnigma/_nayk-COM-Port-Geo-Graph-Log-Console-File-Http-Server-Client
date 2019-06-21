@@ -70,9 +70,14 @@ contains( QT, charts ) {
     SOURCES *= $${PWD}/src/diagram.cpp
 }
 
+contains( CONFIG, console ) {
+    HEADERS *= $${PWD}/inc/console.h
+    SOURCES *= $${PWD}/src/console.cpp
+}
+
 unix:BUILD_DATE = '$(shell date +%Y-%m-%d)'
 win32:BUILD_DATE = '$(shell echo %DATE:~6,4%-%DATE:~3,2%-%DATE:~0,2%)'
 DEFINES += APP_BUILD_DATE=\\\"$$BUILD_DATE\\\"
 
 # для HWUtils:
-#win32:LIBS += -lKernel32 -lPsapi
+win32:LIBS += -lKernel32 -lPsapi
