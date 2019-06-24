@@ -27,6 +27,8 @@
 
 #include <QtCore>
 #include <QVariant>
+#include <QRect>
+#include <QSize>
 
 //=========================================================================================================
 namespace nayk {
@@ -54,7 +56,18 @@ public:
     static const int colorBrightWhite   = 15;
     //
     static void clear();
+    static void clearUp();
+    static void clearDown();
     static void setPos(int row, int col);
+    static void setPosUp(int step = 1);
+    static void setPosDown(int step = 1);
+    static void setPosForward(int step = 1);
+    static void setPosBack(int step = 1);
+    static void toNextLine(int col = 1);
+    static void toPrevLine(int col = 1);
+    static void eraseLine();
+    static void eraseLineLeft();
+    static void eraseLineRight();
     static void savePos();
     static void restorePos();
     static void hideCursor();
@@ -68,9 +81,13 @@ public:
     static void setTextColor(int color = colorWhite);
     static void setBgColor(int color = colorBlack);
     static void blink(bool on = true);
-    static void frame(int row, int col, int width, int height, bool doubleBorder = false);
-    static void rectangle(int row, int col, int width, int height, int bgColor = colorBlack, int frameColor = colorWhite,
-                          bool showFrame = false, bool doubleBorder = false);
+    static void frame(int row, int col, int width, int height, bool doubleBorder = false, int color = -1);
+    static void rectangle(int row, int col, int width, int height, int color = -1);
+    static void frame(const QRect &rect, bool doubleBorder = false, int color = -1);
+    static void rectangle(const QRect &rect, int color = -1);
+    static QSize getSize(const QSize &defaultSize = QSize(80, 25));
+    static int width();
+    static int height();
     //
     Console() = delete;
 };
