@@ -162,7 +162,7 @@ bool DBClient::execSQL(const QString &sqlText)
 //=======================================================================================================
 bool DBClient::execSQL(const QString &sqlText, QSqlQuery *query, bool withTransaction)
 {
-    if(!isOpen()) {
+    if(!isOpen(true)) {
         _lastError = tr("Ошибка выполнения SQL запроса: Нет соединения с БД");
         emit toLog(LogError, _lastError);
         return false;
@@ -215,7 +215,7 @@ bool DBClient::getTableFields(const QString &tableName, QStringList *list)
         return false;
     }
 
-    if(!isOpen()) {
+    if(!isOpen(true)) {
         _lastError = tr("Ошибка выполнения SQL запроса: Нет соединения с БД");
         emit toLog(LogError, _lastError);
         return false;
