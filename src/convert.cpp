@@ -31,6 +31,22 @@ const QChar charXML[]     = {'"',      '&',     '<',    '>',    '\n',    '\r'};
 const QString stringXML[] = {"&quot;", "&amp;", "&lt;", "&gt;", "&#10;", "&#13;"};
 
 //=======================================================================================================
+bool Convert::isHex(const QString &str)
+{
+    if(str.isEmpty()) return false;
+    const QString hexStr = "0123456789ABCDEF";
+    for(int i=0; i<str.length(); i++) {
+
+        if(!hexStr.contains( str.at(i), Qt::CaseInsensitive )) return false;
+    }
+    return true;
+}
+//=======================================================================================================
+bool Convert::isHex(const QByteArray &array)
+{
+    return isHex( QString::fromLocal8Bit(array) );
+}
+//=======================================================================================================
 bool Convert::isASCII(quint8 val)
 {
     return ((val>=32) && (val<=126));

@@ -111,6 +111,8 @@ public:
     static quint16 reverse(quint16 val);
     static quint32 reverse(quint32 val);
     static quint64 reverse(quint64 val);
+    static bool isHex(const QString &str);
+    static bool isHex(const QByteArray &array);
     static bool isASCII(quint8 val);
     static bool isASCII(qint8 val);
     static bool isASCII(char val);
