@@ -51,6 +51,7 @@ public:
     QString lastError() const { return _lastError; }
     static QString highlightLog(LogFormat logFormat, const QString &logText, bool darkBackground = false);
     static QString highlightLogString(LogFormat logFormat, LogType logType, const QString &text, bool darkBackground = false);
+    static QString highlightLogString(LogFormat logFormat, QDateTime dateTime, LogType logType, const QString &text, bool darkBackground = false);
     static QString readLog(LogFormat logFormat, const QString &fileName, bool darkBackground = false);
     static QStringList logFiles(const QString &logDir);
     static QStringList logFiles(const QString &rootLogDir, QDate date);

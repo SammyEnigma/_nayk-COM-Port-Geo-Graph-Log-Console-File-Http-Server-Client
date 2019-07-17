@@ -202,9 +202,9 @@ bool Log::write(LogType logType, const QString &text)
     return true;
 }
 //=======================================================================================================
-QString Log::highlightLogString(LogFormat logFormat, LogType logType, const QString &text, bool darkBackground)
+QString Log::highlightLogString(LogFormat logFormat, QDateTime dateTime, LogType logType, const QString &text, bool darkBackground)
 {
-    QString prefix = getLogPrefix(logType);
+    QString prefix = getLogPrefix(logType, dateTime);
     QString res = "";
     QStringList sl = text.split("\n");
     for(int i=0; i<sl.size(); i++) {
@@ -214,6 +214,11 @@ QString Log::highlightLogString(LogFormat logFormat, LogType logType, const QStr
     QString endLine = (logFormat == PlainLog) ? "\n" : "<br>";
     if (res.right( endLine.length() ) == endLine) res.remove( res.length()-endLine.length(), endLine.length() );
     return res.trimmed();
+}
+//=======================================================================================================
+QString Log::highlightLogString(LogFormat logFormat, LogType logType, const QString &text, bool darkBackground)
+{
+    return highlightLogString(logFormat, QDateTime::currentDateTime(), logType, text, darkBackground);
 }
 //=======================================================================================================
 QString Log::highlightLog(LogFormat logFormat, const QString &logText, bool darkBackground)
