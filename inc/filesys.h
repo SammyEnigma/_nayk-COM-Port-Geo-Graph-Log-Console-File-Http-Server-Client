@@ -38,14 +38,14 @@ namespace nayk {
 class FileSys
 {
 public:
-    static QString applicationFullPath(bool withEndDirSeparator = true);
+    static QString applicationFullPath(bool withEndDirSeparator = true, bool toNativeSeparator = true);
     static bool directoryExists(const QString &dirName);
     static bool fileExists(const QString &fileName);
     static bool makePath(const QString &dirPath);
     static QString changeFileExt(const QString &fileName, const QString &newExt);
     static QString extractFileExt(const QString &fileName, bool withDot = true);
     static QString extractFileName(const QString &fileName);
-    static QString extractFilePath(const QString &fileName);
+    static QString extractFilePath(const QString &fileName, bool toNativeSeparator = true);
     static bool readJsonFromFile(const QString &fileName, QJsonDocument &json, QString &errorString);
     static bool readJsonFromFile(const QString &fileName, QJsonArray &json, QString &errorString);
     static bool readJsonFromFile(const QString &fileName, QJsonObject &json, QString &errorString);

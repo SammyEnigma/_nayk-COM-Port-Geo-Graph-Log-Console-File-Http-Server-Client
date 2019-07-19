@@ -85,19 +85,19 @@ QString FileSys::extractFileName(const QString &fileName)
     return f;
 }
 //====================================================================================================
-QString FileSys::extractFilePath(const QString &fileName)
+QString FileSys::extractFilePath(const QString &fileName, bool toNativeSeparator)
 {
    QString f = QDir::toNativeSeparators(fileName);
    int i = f.lastIndexOf( QDir::separator() );
-   if(i>=0) return f.left(i+1);
+   if(i>=0) return (toNativeSeparator ? f.left(i+1) : QDir::fromNativeSeparators( f.left(i+1) ) );
    else return "";
 }
 //====================================================================================================
-QString FileSys::applicationFullPath(bool withEndDirSeparator)
+QString FileSys::applicationFullPath(bool withEndDirSeparator, bool toNativeSeparator)
 {
     QString res = QDir::toNativeSeparators( QCoreApplication::applicationDirPath() );
     if(withEndDirSeparator && (res.right(1) != QDir::separator())) res += QDir::separator();
-    return res;
+    return (toNativeSeparator ? res : QDir::fromNativeSeparators(res));
 }
 //====================================================================================================
 bool FileSys::readJsonFromFile(const QString &fileName, QJsonDocument &json, QString &errorString)
