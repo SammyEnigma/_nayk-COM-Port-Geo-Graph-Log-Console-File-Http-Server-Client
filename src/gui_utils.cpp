@@ -42,6 +42,7 @@
 #include <QSettings>
 #include <QClipboard>
 #include <QMimeData>
+#include <QToolBar>
 
 #include "gui_utils.h"
 #include "ex_controls.h"
@@ -174,12 +175,10 @@ void Gui::swapTableRows(QTableWidget *table, int row1, int row2)
         QTableWidgetItem *item2 = table->item(row2, col);
 
         if(item1 && item2) {
-            QColor cl = item1->backgroundColor();
+
             QBrush br = item1->background();
             item1->setBackground( item2->background() );
-            item1->setBackgroundColor( item2->backgroundColor() );
             item2->setBackground( br );
-            item2->setBackgroundColor( cl );
 
             table->setItem( row1, col, item2 );
             table->setItem( row2, col, item1 );
@@ -347,6 +346,7 @@ void Gui::swapWidgets(QWidget *w1, QWidget *w2)
 
 }
 //============================================================================================
+/*
 bool Gui::saveControlValue(QWidget *w, const QString &fileName, const QString &prefixKey)
 {
     if(!w) return false;
@@ -387,6 +387,11 @@ bool Gui::saveControlValue(QWidget *w, const QString &fileName, const QString &p
         QCheckBox* cb = dynamic_cast<QCheckBox*>(w);
         if(!cb) return false;
         ini.setValue(section + "/" + key, cb->isChecked() );
+    }
+    else if(className == "QToolBar") {
+        QToolBar* tb = dynamic_cast<QToolBar*>(w);
+        if(!tb) return false;
+        ini.setValue(section + "/" + key, tb->isVisible() );
     }
     else if(className == "QRadioButton") {
         QRadioButton* rb = dynamic_cast<QRadioButton*>(w);
@@ -456,6 +461,12 @@ bool Gui::loadControlValue(QWidget *w, const QString &fileName, const QString &p
         cb->setChecked( ini.value(section + "/" + key, cb->isChecked() ).toBool() );
         return true;
     }
+    else if(className == "QToolBar") {
+        QToolBar* tb = dynamic_cast<QToolBar*>(w);
+        if(!tb) return false;
+        tb->setVisible( ini.value(section + "/" + key, tb->isVisible() ).toBool() );
+        return true;
+    }
     else if(className == "QRadioButton") {
         QRadioButton* rb = dynamic_cast<QRadioButton*>(w);
         if(!rb) return false;
@@ -465,6 +476,151 @@ bool Gui::loadControlValue(QWidget *w, const QString &fileName, const QString &p
         QDateTimeEdit* de = dynamic_cast<QDateTimeEdit*>(w);
         if(!de) return false;
         de->setDateTime( ini.value(section + "/" + key, de->dateTime() ).toDateTime() );
+        return true;
+    }
+
+    return false;
+}
+*/
+//============================================================================================
+bool Gui::saveControlValue(QObject *obj, const QString &fileName, const QString &prefixKey)
+{
+    if(!obj) return false;
+    QSettings ini(fileName, QSettings::IniFormat);
+    if(!ini.isWritable()) return false;
+    ini.setIniCodec("UTF-8");
+
+    QString section = "TopParent", key = prefixKey + obj->objectName();
+    QObject* tmpObj = obj->parent();
+    while(tmpObj) {
+        if(!tmpObj->parent()) section = tmpObj->objectName();
+        tmpObj = tmpObj->parent();
+    }
+
+    QString className = QString(obj->metaObject()->className());
+
+    if(className == "QComboBox") {
+        QComboBox* box = dynamic_cast<QComboBox*>(obj);
+        if(!box) return false;
+        ini.setValue(section + "/" + key, box->currentText() );
+    }
+    else if(className == "QLineEdit") {
+        QLineEdit* le = dynamic_cast<QLineEdit*>(obj);
+        if(!le) return false;
+        ini.setValue(section + "/" + key, le->text() );
+    }
+    else if((className == "QSpinBox") || (className == "ExSpinBox")) {
+        QSpinBox* sb = dynamic_cast<QSpinBox*>(obj);
+        if(!sb) return false;
+        ini.setValue(section + "/" + key, sb->value() );
+    }
+    else if(className == "QDoubleSpinBox") {
+        QDoubleSpinBox* db = dynamic_cast<QDoubleSpinBox*>(obj);
+        if(!db) return false;
+        ini.setValue(section + "/" + key, db->value() );
+    }
+    else if(className == "QCheckBox") {
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(obj);
+        if(!cb) return false;
+        ini.setValue(section + "/" + key, cb->isChecked() );
+    }
+    else if(className == "QToolBar") {
+        QToolBar* tb = dynamic_cast<QToolBar*>(obj);
+        if(!tb) return false;
+        ini.setValue(section + "/" + key, tb->isVisible() );
+    }
+    else if(className == "QRadioButton") {
+        QRadioButton* rb = dynamic_cast<QRadioButton*>(obj);
+        if(!rb) return false;
+        ini.setValue(section + "/" + key, rb->isChecked() );
+    }
+    else if((className == "QDateEdit") || (className == "QTimeEdit") || (className == "QDateTimeEdit")) {
+        QDateTimeEdit* de = dynamic_cast<QDateTimeEdit*>(obj);
+        if(!de) return false;
+        ini.setValue(section + "/" + key, de->dateTime() );
+    }
+    else if(className == "QAction") {
+        QAction* act = dynamic_cast<QAction*>(obj);
+        if(!act) return false;
+        ini.setValue(section + "/" + key, act->isChecked() );
+    }
+    else return false;
+
+    ini.sync();
+    return (ini.status() == QSettings::NoError);
+}
+//============================================================================================
+bool Gui::loadControlValue(QObject *obj, const QString &fileName, const QString &prefixKey)
+{
+    if(!obj) return false;
+    QSettings ini(fileName, QSettings::IniFormat);
+    ini.setIniCodec("UTF-8");
+
+    QString section = "TopParent", key = prefixKey + obj->objectName();
+    QObject* tmpObj = obj->parent();
+    while(tmpObj) {
+        if(!tmpObj->parent()) section = tmpObj->objectName();
+        tmpObj = tmpObj->parent();
+    }
+
+    QString className = QString(obj->metaObject()->className());
+
+    if(className == "QComboBox") {
+        QComboBox* box = dynamic_cast<QComboBox*>(obj);
+        if(!box) return false;
+        QString str = ini.value(section + "/" + key, box->currentText() ).toString();
+        for(auto i=0; i<box->count(); ++i) {
+            if(box->itemText(i) == str) {
+                box->setCurrentIndex(i);
+                return true;
+            }
+        }
+    }
+    else if(className == "QLineEdit") {
+        QLineEdit* le = dynamic_cast<QLineEdit*>(obj);
+        if(!le) return false;
+        le->setText( ini.value(section + "/" + key, le->text() ).toString());
+        return true;
+    }
+    else if((className == "QSpinBox") || (className == "ExSpinBox")) {
+        QSpinBox* sb = dynamic_cast<QSpinBox*>(obj);
+        if(!sb) return false;
+        sb->setValue( ini.value(section + "/" + key, sb->value() ).toInt() );
+        return true;
+    }
+    else if(className == "QDoubleSpinBox") {
+        QDoubleSpinBox* db = dynamic_cast<QDoubleSpinBox*>(obj);
+        if(!db) return false;
+        db->setValue( ini.value(section + "/" + key, db->value() ).toDouble() );
+        return true;
+    }
+    else if(className == "QCheckBox") {
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(obj);
+        if(!cb) return false;
+        cb->setChecked( ini.value(section + "/" + key, cb->isChecked() ).toBool() );
+        return true;
+    }
+    else if(className == "QToolBar") {
+        QToolBar* tb = dynamic_cast<QToolBar*>(obj);
+        if(!tb) return false;
+        tb->setVisible( ini.value(section + "/" + key, tb->isVisible() ).toBool() );
+        return true;
+    }
+    else if(className == "QRadioButton") {
+        QRadioButton* rb = dynamic_cast<QRadioButton*>(obj);
+        if(!rb) return false;
+        rb->setChecked( ini.value(section + "/" + key, rb->isChecked() ).toBool() );
+    }
+    else if((className == "QDateEdit") || (className == "QTimeEdit") || (className == "QDateTimeEdit")) {
+        QDateTimeEdit* de = dynamic_cast<QDateTimeEdit*>(obj);
+        if(!de) return false;
+        de->setDateTime( ini.value(section + "/" + key, de->dateTime() ).toDateTime() );
+        return true;
+    }
+    else if(className == "QAction") {
+        QAction* act = dynamic_cast<QAction*>(obj);
+        if(!act) return false;
+        act->setChecked( ini.value(section + "/" + key, act->isChecked() ).toBool() );
         return true;
     }
 

@@ -58,8 +58,10 @@ public:
     static QWidget* getMainWindowWidget();
     static void clearWidgets(QLayout *layout);
     static void swapWidgets(QWidget *w1, QWidget *w2);
-    static bool saveControlValue(QWidget *w, const QString &fileName, const QString &prefixKey = QString());
-    static bool loadControlValue(QWidget *w, const QString &fileName, const QString &prefixKey = QString());
+    //static bool saveControlValue(QWidget *w, const QString &fileName, const QString &prefixKey = QString());
+    //static bool loadControlValue(QWidget *w, const QString &fileName, const QString &prefixKey = QString());
+    static bool saveControlValue(QObject *obj, const QString &fileName, const QString &prefixKey = QString());
+    static bool loadControlValue(QObject *obj, const QString &fileName, const QString &prefixKey = QString());
     //
     Gui() = delete;
 };
