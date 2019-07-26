@@ -27,6 +27,7 @@
 
 #include <QObject>
 #include <QtNetwork/QtNetwork>
+#include <QtNetwork/QHttpMultiPart>
 #include <QByteArray>
 #include <QString>
 #include <QJsonDocument>
