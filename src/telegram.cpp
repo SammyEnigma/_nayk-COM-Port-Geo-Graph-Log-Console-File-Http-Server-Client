@@ -73,6 +73,7 @@ bool Telegram::readRequest()
     _is_reply = false;
     _reply_user = UserStruct();
     _reply_msg = MsgStruct();
+    _callback = CallbackStruct();
 
     HttpServer *server = new HttpServer(this);
     server->setDbgLogging(true);
@@ -125,32 +126,35 @@ bool Telegram::parseRequest()
 
     _update_id = _requestObj.value("update_id").toVariant().toLongLong();
 
-    if(_requestObj.contains("message")) {
+    if(_requestObj.contains("callback_query")) {
+
+        QJsonObject callback_query = _requestObj.value("callback_query").toObject();
+
+        _callback.id = callback_query.value("id").toString("");
+        _callback.chat_instance = callback_query.value("chat_instance").toString("");
+        _callback.data = callback_query.value("data").toString("");
+
+        if(callback_query.contains("from"))
+            parseUserObject(callback_query.value("from").toObject(), _user);
+
+        if(callback_query.contains("message")) {
+            QJsonObject message = callback_query.value("message").toObject();
+            _callback.from_msg_id = message.value("message_id").toVariant().toLongLong();
+
+            if(message.contains("chat")) {
+                parseChatObject(message.value("chat").toObject(), _chat);
+            }
+        }
+    }
+    else if(_requestObj.contains("message")) {
         QJsonObject message = _requestObj.value("message").toObject();
         _msg.type = Msg_Text;
 
         if(message.contains("chat")) {
 
             QJsonObject chatObj = message.value("chat").toObject();
-            _chat.id = chatObj.value("id").toVariant().toLongLong();
-            if(chatObj.contains("type")) {
-                QString typeStr = chatObj.value("type").toString();
-                if(typeStr == "private") {
-                    _chat.type = Chat_Private;
-                }
-                else if(typeStr == "group") {
-                    _chat.type = Chat_Group;
-                }
-                else if(typeStr == "supergroup") {
-                    _chat.type = Chat_Supergroup;
-                }
-                else if(typeStr == "channel") {
-                    _chat.type = Chat_Channel;
-                }
-            }
-            if(chatObj.contains("title")) {
-                _chat.title = chatObj.value("title").toString();
-            }
+            parseChatObject(chatObj, _chat);
+
             if(chatObj.contains("first_name")) {
                 _user.firstName = chatObj.value("first_name").toString();
             }
@@ -164,22 +168,7 @@ bool Telegram::parseRequest()
 
         if(message.contains("from")) {
 
-            QJsonObject from = message.value("from").toObject();
-            if(from.contains("first_name") && _user.firstName.isEmpty()) {
-                _user.firstName = from.value("first_name").toString();
-            }
-            if(from.contains("last_name") && _user.lastName.isEmpty()) {
-                _user.firstName = from.value("last_name").toString();
-            }
-            if(from.contains("username") && _user.name.isEmpty()) {
-                _user.name = from.value("username").toString();
-            }
-            if(from.contains("is_bot") && from.value("is_bot").toBool()) {
-                _user.type = User_Bot;
-            }
-            if(from.contains("id")) {
-                _user.id = from.value("id").toVariant().toLongLong();
-            }
+            parseUserObject(message.value("from").toObject(), _user);
         }
         if(message.contains("date")) {
 
@@ -239,22 +228,7 @@ bool Telegram::parseRequest()
             QJsonObject reply_message = message.value("reply_to_message").toObject();
             if(reply_message.contains("from")) {
 
-                QJsonObject from = reply_message.value("from").toObject();
-                if(from.contains("first_name") && _reply_user.firstName.isEmpty()) {
-                    _reply_user.firstName = from.value("first_name").toString();
-                }
-                if(from.contains("last_name") && _reply_user.lastName.isEmpty()) {
-                    _reply_user.firstName = from.value("last_name").toString();
-                }
-                if(from.contains("username") && _reply_user.name.isEmpty()) {
-                    _reply_user.name = from.value("username").toString();
-                }
-                if(from.contains("is_bot") && from.value("is_bot").toBool()) {
-                    _reply_user.type = User_Bot;
-                }
-                if(from.contains("id")) {
-                    _reply_user.id = from.value("id").toVariant().toLongLong();
-                }
+                parseUserObject(reply_message.value("from").toObject(), _reply_user);
             }
             if(reply_message.contains("date")) {
 
@@ -276,6 +250,56 @@ bool Telegram::parseRequest()
     if(!_photo.file_id.isEmpty() && (_photo.width > 0) && (_photo.height > 0)) _msg.type = Msg_Photo;
     else if(!_document.file_id.isEmpty()) _msg.type = Msg_Document;
     else if(!_msg.text.isEmpty() && (_msg.text.left(1) == "/")) _msg.type = Msg_Command;
+
+    return true;
+}
+//==================================================================================================
+bool Telegram::parseUserObject(const QJsonObject &obj, UserStruct &user)
+{
+    user = UserStruct();
+
+    if(obj.contains("first_name") && user.firstName.isEmpty()) {
+        user.firstName = obj.value("first_name").toString();
+    }
+    if(obj.contains("last_name") && user.lastName.isEmpty()) {
+        user.firstName = obj.value("last_name").toString();
+    }
+    if(obj.contains("username") && user.name.isEmpty()) {
+        user.name = obj.value("username").toString();
+    }
+    if(obj.contains("is_bot") && obj.value("is_bot").toBool()) {
+        user.type = User_Bot;
+    }
+    if(obj.contains("id")) {
+        user.id = obj.value("id").toVariant().toLongLong();
+    }
+
+    return true;
+}
+//==================================================================================================
+bool Telegram::parseChatObject(const QJsonObject &obj, ChatStruct &chat)
+{
+    chat = ChatStruct();
+
+    chat.id = obj.value("id").toVariant().toLongLong();
+    if(obj.contains("type")) {
+        QString typeStr = obj.value("type").toString();
+        if(typeStr == "private") {
+            chat.type = Chat_Private;
+        }
+        else if(typeStr == "group") {
+            chat.type = Chat_Group;
+        }
+        else if(typeStr == "supergroup") {
+            chat.type = Chat_Supergroup;
+        }
+        else if(typeStr == "channel") {
+            chat.type = Chat_Channel;
+        }
+    }
+    if(obj.contains("title")) {
+        chat.title = obj.value("title").toString();
+    }
 
     return true;
 }
@@ -303,6 +327,16 @@ bool Telegram::sendMessageHTML(qint64 chatId, const QString &text, const QJsonOb
 bool Telegram::sendMessage(const QString &text, const QString &parseMode, const QJsonObject &replyMarkup)
 {
     return sendMessage(_chat.id, text, parseMode, replyMarkup);
+}
+//==================================================================================================
+bool Telegram::sendMessage(qint64 chatId, const MsgStruct &message)
+{
+    return sendMessage(chatId, message.text);
+}
+//==================================================================================================
+bool Telegram::sendMessage(const MsgStruct &message)
+{
+    return sendMessage(_chat.id, message);
 }
 //==================================================================================================
 bool Telegram::sendMessage(qint64 chatId, const QString &text, const QString &parseMode, const QJsonObject &replyMarkup)
@@ -347,7 +381,17 @@ bool Telegram::sendPhotoHTML(const QString &file_id, const QString &caption, con
 {
     return sendPhoto(file_id, caption, "HTML", replyMarkup);
 }
-//=========================================================================================
+//==================================================================================================
+bool Telegram::sendPhoto(qint64 chatId, const PhotoStruct &photo)
+{
+    return sendPhoto(chatId, photo.file_id, photo.caption);
+}
+//==================================================================================================
+bool Telegram::sendPhoto(const PhotoStruct &photo)
+{
+    return sendPhoto(_chat.id, photo);
+}
+//==================================================================================================
 bool Telegram::sendPhotoFile(qint64 chatId, const QByteArray &data, const QString &caption, const QString &imgType )
 {
     if(chatId == 0) {
@@ -414,6 +458,16 @@ bool Telegram::sendVideoHTML(qint64 chatId, const QString &file_id, const QStrin
 bool Telegram::sendVideoHTML(const QString &file_id, const QString &caption, const QJsonObject &replyMarkup)
 {
     return sendVideo(file_id, caption, "HTML", replyMarkup);
+}
+//==================================================================================================
+bool Telegram::sendDocument(qint64 chatId, const DocumentStruct &document)
+{
+    return sendDocument(chatId, document.file_id, document.caption, document.docType);
+}
+//==================================================================================================
+bool Telegram::sendDocument(const DocumentStruct &document)
+{
+    return sendDocument(_chat.id, document);
 }
 //==================================================================================================
 bool Telegram::sendDocument(qint64 chatId, const QString &file_id, const QString &caption, DocType docType, const QString &parseMode, const QJsonObject &replyMarkup)
@@ -559,6 +613,56 @@ QString Telegram::userName()
     if(!_user.name.isEmpty()) return _user.name;
     if(!_user.lastName.isEmpty()) return _user.lastName;
     return tr("User");
+}
+//==================================================================================================
+bool Telegram::deleteMessage(qint64 message_id)
+{
+    return deleteMessage(_chat.id, message_id);
+}
+//==================================================================================================
+bool Telegram::deleteMessage(qint64 chat_id, qint64 message_id)
+{
+    if(chat_id == 0) {
+
+        emit toLog(LogError, "Не определен chat_id");
+        return false;
+    }
+
+    QString url = telegram_api_url + "bot" + _token + "/deleteMessage";
+    QJsonObject obj;
+    obj["chat_id"] = chat_id;
+    obj["message_id"] = message_id;
+
+    return sendToTelegram(url, obj);
+}
+//==================================================================================================
+bool Telegram::deleteMessage(const QString &user_name, qint64 message_id)
+{
+    if(user_name.isEmpty()) {
+
+        emit toLog(LogError, "Не определен user_name");
+        return false;
+    }
+
+    QString url = telegram_api_url + "bot" + _token + "/deleteMessage";
+    QJsonObject obj;
+    obj["chat_id"] = "@" + user_name;
+    obj["message_id"] = message_id;
+
+    return sendToTelegram(url, obj);
+}
+//==================================================================================================
+QString Telegram::getChatTypeText(ChatType chatType)
+{
+    switch (chatType) {
+    case Chat_Private: return "Private";
+    case Chat_Group: return "Group";
+    case Chat_Supergroup: return "Supergroup";
+    case Chat_Channel: return "Channel";
+    default:
+        break;
+    }
+    return "Unknown";
 }
 //==================================================================================================
 } // namespace

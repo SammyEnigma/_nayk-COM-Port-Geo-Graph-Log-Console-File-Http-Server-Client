@@ -86,6 +86,13 @@ public:
         DocType docType {Doc_Unknown};
     } DocumentStruct;
     //
+    typedef struct CallbackStruct {
+        QString id {""};
+        QString chat_instance {""};
+        QString data {""};
+        qint64 from_msg_id {0};
+    } CallbackStruct;
+    //
     explicit Telegram(QObject *parent = nullptr, const QString &token = QString(), const QString &name = QString());
     ~Telegram();
     void setToken(const QString &token);
@@ -99,7 +106,9 @@ public:
     MsgStruct message() const { return _msg; }
     PhotoStruct photo() const { return _photo; }
     DocumentStruct document() const { return _document; }
+    CallbackStruct callback() const { return _callback; }
     qint64 update_id() const { return _update_id; }
+    bool is_callback() const { return !_callback.id.isEmpty(); }
     bool is_reply() const { return _is_reply; }
     bool is_reply_to_me() const { return _is_reply && (_reply_user.type == User_Bot) && (_reply_user.name == _name); }
     UserStruct reply_user() const { return _reply_user; }
@@ -111,6 +120,8 @@ public:
     bool sendMessageHTML(const QString &text, const QJsonObject &replyMarkup = QJsonObject());
     bool sendMessage(qint64 chatId, const QString &text, const QString &parseMode = QString(""), const QJsonObject &replyMarkup = QJsonObject());
     bool sendMessage(const QString &text, const QString &parseMode = QString(""), const QJsonObject &replyMarkup = QJsonObject());
+    bool sendMessage(qint64 chatId, const MsgStruct &message);
+    bool sendMessage(const MsgStruct &message);
     //
     bool sendPhotoFile(qint64 chatId, const QByteArray &data, const QString &caption = QString(""), const QString &imgType = QString("jpeg"));
     bool sendPhotoFile(const QByteArray &data, const QString &caption = QString(""), const QString &imgType = QString("jpeg"));
@@ -118,6 +129,8 @@ public:
     bool sendPhoto(const QString &file_id, const QString &caption = QString(""), const QString &parseMode = QString(""), const QJsonObject &replyMarkup = QJsonObject());
     bool sendPhotoHTML(qint64 chatId, const QString &file_id, const QString &caption = QString(""), const QJsonObject &replyMarkup = QJsonObject());
     bool sendPhotoHTML(const QString &file_id, const QString &caption = QString(""), const QJsonObject &replyMarkup = QJsonObject());
+    bool sendPhoto(qint64 chatId, const PhotoStruct &photo);
+    bool sendPhoto(const PhotoStruct &photo);
     //
     bool sendAudio(qint64 chatId, const QString &file_id, const QString &caption = QString(""), const QString &parseMode = QString(""), const QJsonObject &replyMarkup = QJsonObject());
     bool sendAudio(const QString &file_id, const QString &caption = QString(""), const QString &parseMode = QString(""), const QJsonObject &replyMarkup = QJsonObject());
@@ -133,9 +146,16 @@ public:
     bool sendDocument(const QString &file_id, const QString &caption = QString(""), DocType docType = Doc_Document, const QString &parseMode = QString(""), const QJsonObject &replyMarkup = QJsonObject());
     bool sendDocumentHTML(qint64 chatId, const QString &file_id, const QString &caption = QString(""), DocType docType = Doc_Document, const QJsonObject &replyMarkup = QJsonObject());
     bool sendDocumentHTML(const QString &file_id, const QString &caption = QString(""), DocType docType = Doc_Document, const QJsonObject &replyMarkup = QJsonObject());
+    bool sendDocument(qint64 chatId, const DocumentStruct &document);
+    bool sendDocument(const DocumentStruct &document);
+    //
+    bool deleteMessage(qint64 message_id);
+    bool deleteMessage(qint64 chat_id, qint64 message_id);
+    bool deleteMessage(const QString &user_name, qint64 message_id);
     //
     QJsonObject lastAnswer();
     QString userName();
+    static QString getChatTypeText(ChatType chatType);
 
 signals:
     void toLog(LogType logType, QString text);
@@ -150,6 +170,7 @@ private:
     MsgStruct _msg;
     PhotoStruct _photo;
     DocumentStruct _document;
+    CallbackStruct _callback;
     qint64 _update_id {0};
     bool _is_reply {false};
     UserStruct _reply_user;
@@ -157,6 +178,8 @@ private:
     HttpClient *http {nullptr};
     //
     bool parseRequest();
+    bool parseUserObject(const QJsonObject &obj, UserStruct &user);
+    bool parseChatObject(const QJsonObject &obj, ChatStruct &chat);
     bool sendToTelegram(const QString &url, const QJsonObject &obj);
     bool sendToTelegram(const QString &url, QHttpMultiPart *multiPart);
 
