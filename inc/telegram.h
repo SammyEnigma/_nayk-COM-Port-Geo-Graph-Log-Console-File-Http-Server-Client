@@ -153,6 +153,13 @@ public:
     bool deleteMessage(qint64 chat_id, qint64 message_id);
     bool deleteMessage(const QString &user_name, qint64 message_id);
     //
+    bool sendChatAction(qint64 chat_id, const QString &action);
+    bool sendChatAction(const QString &action);
+    bool sendChatActionTyping(qint64 chat_id);
+    bool sendChatActionTyping();
+    bool sendChatActionDocument(qint64 chat_id, DocType docType = Doc_Document);
+    bool sendChatActionDocument(DocType docType = Doc_Document);
+    //
     QJsonObject lastAnswer();
     QString userName();
     static QString getChatTypeText(ChatType chatType);

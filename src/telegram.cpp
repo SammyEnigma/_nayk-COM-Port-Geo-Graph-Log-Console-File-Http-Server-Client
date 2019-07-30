@@ -357,6 +357,64 @@ bool Telegram::sendMessage(qint64 chatId, const QString &text, const QString &pa
     return sendToTelegram(url, obj);
 }
 //==================================================================================================
+bool Telegram::sendChatAction(qint64 chat_id, const QString &action)
+{
+    if(chat_id == 0) {
+
+        emit toLog(LogError, "Не определен chatId");
+        return false;
+    }
+
+    QString url = telegram_api_url + "bot" + _token + "/sendChatAction";
+    QJsonObject obj;
+    obj["chat_id"] = chat_id;
+    obj["action"] = action;
+
+    return sendToTelegram(url, obj);
+}
+//==================================================================================================
+bool Telegram::sendChatAction(const QString &action)
+{
+    return sendChatAction(_chat.id, action);
+}
+//==================================================================================================
+bool Telegram::sendChatActionTyping(qint64 chat_id)
+{
+    return sendChatAction(chat_id, "typing");
+}
+//==================================================================================================
+bool Telegram::sendChatActionTyping()
+{
+    return sendChatActionTyping(_chat.id);
+}
+//==================================================================================================
+bool Telegram::sendChatActionDocument(qint64 chat_id, DocType docType)
+{
+    QString action = "typing";
+    switch (docType) {
+    case Doc_Audio:
+        action = "upload_audio";
+        break;
+    case Doc_Video:
+        action = "upload_video";
+        break;
+    case Doc_Photo:
+        action = "upload_photo";
+        break;
+    case Doc_Document:
+        action = "upload_document";
+        break;
+    default:
+        break;
+    }
+    return sendChatAction(chat_id, action);
+}
+//==================================================================================================
+bool Telegram::sendChatActionDocument(DocType docType)
+{
+    return sendChatActionDocument(_chat.id, docType);
+}
+//==================================================================================================
 bool Telegram::sendPhotoFile(const QByteArray &data, const QString &caption, const QString &imgType )
 {
     return sendPhotoFile( _chat.id, data, caption, imgType );
