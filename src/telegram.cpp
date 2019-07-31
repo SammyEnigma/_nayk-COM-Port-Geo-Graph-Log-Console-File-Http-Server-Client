@@ -245,6 +245,13 @@ bool Telegram::parseRequest()
                 _reply_msg.id = reply_message.value("message_id").toVariant().toLongLong();
             }
         }
+
+        checkParseChatMigrate(message);
+    }
+
+    if(_requestObj.contains("edited_channel_post")) {
+
+        checkParseChatMigrate(_requestObj.value("edited_channel_post").toObject());
     }
 
     if(!_photo.file_id.isEmpty() && (_photo.width > 0) && (_photo.height > 0)) _msg.type = Msg_Photo;
@@ -252,6 +259,13 @@ bool Telegram::parseRequest()
     else if(!_msg.text.isEmpty() && (_msg.text.left(1) == "/")) _msg.type = Msg_Command;
 
     return true;
+}
+//==================================================================================================
+void Telegram::checkParseChatMigrate(const QJsonObject &obj)
+{
+    if(obj.contains("new_chat_title")) _new_chat_title = obj.value("new_chat_title").toString();
+    if(obj.contains("migrate_to_chat_id")) _migrate_to_chat_id = obj.value("migrate_to_chat_id").toVariant().toLongLong();
+    if(obj.contains("migrate_from_chat_id")) _migrate_from_chat_id = obj.value("migrate_from_chat_id").toVariant().toLongLong();
 }
 //==================================================================================================
 bool Telegram::parseUserObject(const QJsonObject &obj, UserStruct &user)
@@ -355,6 +369,27 @@ bool Telegram::sendMessage(qint64 chatId, const QString &text, const QString &pa
     if(!replyMarkup.isEmpty()) obj["reply_markup"] = replyMarkup;
 
     return sendToTelegram(url, obj);
+}
+//==================================================================================================
+bool Telegram::sendSticker(qint64 chat_id, const QString &file_id)
+{
+    if(chat_id == 0) {
+
+        emit toLog(LogError, "Не определен chatId");
+        return false;
+    }
+
+    QString url = telegram_api_url + "bot" + _token + "/sendSticker";
+    QJsonObject obj;
+    obj["chat_id"] = chat_id;
+    obj["sticker"] = file_id;
+
+    return sendToTelegram(url, obj);
+}
+//==================================================================================================
+bool Telegram::sendSticker(const QString &file_id)
+{
+    return sendSticker(_chat.id, file_id);
 }
 //==================================================================================================
 bool Telegram::sendChatAction(qint64 chat_id, const QString &action)

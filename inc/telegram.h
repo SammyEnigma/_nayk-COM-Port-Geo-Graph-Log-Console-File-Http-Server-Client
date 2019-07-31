@@ -111,8 +111,13 @@ public:
     bool is_callback() const { return !_callback.id.isEmpty(); }
     bool is_reply() const { return _is_reply; }
     bool is_reply_to_me() const { return _is_reply && (_reply_user.type == User_Bot) && (_reply_user.name == _name); }
+    bool is_chat_title_change() { return !_new_chat_title.isNull(); }
+    bool is_chat_migrate() { return (_migrate_to_chat_id != 0) && (_migrate_from_chat_id != 0); }
     UserStruct reply_user() const { return _reply_user; }
     MsgStruct reply_message() const { return _reply_msg; }
+    qint64 new_chat_id() { return _migrate_to_chat_id; }
+    qint64 old_chat_id() { return _migrate_from_chat_id; }
+    QString new_chat_title() { return _new_chat_title; }
     //
     bool sendMessageMarkdown(qint64 chatId, const QString &text, const QJsonObject &replyMarkup = QJsonObject());
     bool sendMessageMarkdown(const QString &text, const QJsonObject &replyMarkup = QJsonObject());
@@ -160,6 +165,9 @@ public:
     bool sendChatActionDocument(qint64 chat_id, DocType docType = Doc_Document);
     bool sendChatActionDocument(DocType docType = Doc_Document);
     //
+    bool sendSticker(qint64 chat_id, const QString &file_id);
+    bool sendSticker(const QString &file_id);
+    //
     QJsonObject lastAnswer();
     QString userName();
     static QString getChatTypeText(ChatType chatType);
@@ -183,10 +191,14 @@ private:
     UserStruct _reply_user;
     MsgStruct _reply_msg;
     HttpClient *http {nullptr};
+    QString _new_chat_title {QString()};
+    qint64 _migrate_to_chat_id {0};
+    qint64 _migrate_from_chat_id {0};
     //
     bool parseRequest();
     bool parseUserObject(const QJsonObject &obj, UserStruct &user);
     bool parseChatObject(const QJsonObject &obj, ChatStruct &chat);
+    void checkParseChatMigrate(const QJsonObject &obj);
     bool sendToTelegram(const QString &url, const QJsonObject &obj);
     bool sendToTelegram(const QString &url, QHttpMultiPart *multiPart);
 
