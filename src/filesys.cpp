@@ -25,6 +25,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 
 #include "filesys.h"
 
@@ -32,13 +33,14 @@ namespace nayk {
 //=======================================================================================================
 bool FileSys::directoryExists(const QString &dirName)
 {
-    QDir dir( QDir::homePath() );
-    return dir.exists(dirName);
+    QFileInfo dir(dirName);
+    return dir.exists() && dir.isDir();
 }
 //====================================================================================================
 bool FileSys::fileExists(const QString &fileName)
 {
-    return QFile::exists(fileName);
+    QFileInfo file(fileName);
+    return file.exists() && file.isFile();
 }
 //====================================================================================================
 bool FileSys::makePath(const QString &dirPath)
