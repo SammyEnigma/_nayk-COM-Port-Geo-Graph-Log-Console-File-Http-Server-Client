@@ -371,6 +371,39 @@ bool Telegram::sendMessage(qint64 chatId, const QString &text, const QString &pa
     return sendToTelegram(url, obj);
 }
 //==================================================================================================
+bool Telegram::sendReplyMessage(qint64 chatId, qint64 reply_message_id, const QString &text, const QString &parseMode)
+{
+    if(chatId == 0) {
+
+        emit toLog(LogError, "Не определен chatId");
+        return false;
+    }
+
+    QString url = telegram_api_url + "bot" + _token + "/sendMessage";
+    QJsonObject obj;
+    obj["chat_id"] = chatId;
+    obj["text"] = text;
+    obj["reply_to_message_id"] = reply_message_id;
+    if(!parseMode.isEmpty()) obj["parse_mode"] = parseMode;
+
+    return sendToTelegram(url, obj);
+}
+//==================================================================================================
+bool Telegram::sendReplyMessage(qint64 chatId, qint64 reply_message_id, const QString &text)
+{
+    return sendReplyMessage(chatId, reply_message_id, text, "");
+}
+//==================================================================================================
+bool Telegram::sendReplyMessageHTML(qint64 chatId, qint64 reply_message_id, const QString &text)
+{
+    return sendReplyMessage(chatId, reply_message_id, text, "HTML");
+}
+//==================================================================================================
+bool Telegram::sendReplyMessageMarkdown(qint64 chatId, qint64 reply_message_id, const QString &text)
+{
+    return sendReplyMessage(chatId, reply_message_id, text, "Markdown");
+}
+//==================================================================================================
 bool Telegram::sendSticker(qint64 chat_id, const QString &file_id)
 {
     if(chat_id == 0) {

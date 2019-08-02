@@ -128,6 +128,11 @@ public:
     bool sendMessage(qint64 chatId, const MsgStruct &message);
     bool sendMessage(const MsgStruct &message);
     //
+    bool sendReplyMessage(qint64 chatId, qint64 reply_message_id, const QString &text, const QString &parseMode);
+    bool sendReplyMessage(qint64 chatId, qint64 reply_message_id, const QString &text);
+    bool sendReplyMessageHTML(qint64 chatId, qint64 reply_message_id, const QString &text);
+    bool sendReplyMessageMarkdown(qint64 chatId, qint64 reply_message_id, const QString &text);
+    //
     bool sendPhotoFile(qint64 chatId, const QByteArray &data, const QString &caption = QString(""), const QString &imgType = QString("jpeg"));
     bool sendPhotoFile(const QByteArray &data, const QString &caption = QString(""), const QString &imgType = QString("jpeg"));
     bool sendPhoto(qint64 chatId, const QString &file_id, const QString &caption = QString(""), const QString &parseMode = QString(""), const QJsonObject &replyMarkup = QJsonObject());
