@@ -59,7 +59,7 @@ bool System::slotExists(QObject *obj, const char *slot_sign)
 //====================================================================================================
 bool System::isSummerTime(QDateTime dateTime)
 {   // летнее время в РФ отменено
-    Q_UNUSED( dateTime );
+    Q_UNUSED( dateTime )
 
     return false;
 }
