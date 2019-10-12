@@ -205,7 +205,7 @@ bool ComPort::setPortName(const QString &portName)
 {
     QString oldName = port.portName();
     port.setPortName(portName);
-    toLog(LogInfo, tr("Порт %1: Изменение имени на %2.").arg(oldName).arg(port.portName()));
+    emit toLog(LogInfo, tr("Порт %1: Изменение имени на %2.").arg(oldName).arg(port.portName()));
     return true;
 }
 //=======================================================================================================
@@ -216,7 +216,7 @@ bool ComPort::setBaudRate(qint32 baudRate)
         emit toLog(LogError, _lastError);
         return false;
     }
-    toLog(LogInfo, tr("Порт %1: Установлена скорость %2.").arg(port.portName()).arg(baudRate));
+    emit toLog(LogInfo, tr("Порт %1: Установлена скорость %2.").arg(port.portName()).arg(baudRate));
     return true;
 }
 //=======================================================================================================
@@ -228,7 +228,7 @@ bool ComPort::setDataBits(QSerialPort::DataBits dataBits)
         emit toLog(LogError, _lastError);
         return false;
     }
-    toLog(LogInfo, tr("Порт %1: Установлены биты данных %2.").arg(port.portName()).arg(str));
+    emit toLog(LogInfo, tr("Порт %1: Установлены биты данных %2.").arg(port.portName()).arg(str));
     return true;
 }
 //=======================================================================================================
@@ -240,7 +240,7 @@ bool ComPort::setStopBits(QSerialPort::StopBits stopBits)
         emit toLog(LogError, _lastError);
         return false;
     }
-    toLog(LogInfo, tr("Порт %1: Установлены стоповые биты %2.").arg(port.portName()).arg(str));
+    emit toLog(LogInfo, tr("Порт %1: Установлены стоповые биты %2.").arg(port.portName()).arg(str));
     return true;
 }
 //=======================================================================================================
@@ -252,7 +252,7 @@ bool ComPort::setParity(QSerialPort::Parity parity)
         emit toLog(LogError, _lastError);
         return false;
     }
-    toLog(LogInfo, tr("Порт %1: Установлена четность %2.").arg(port.portName()).arg(str));
+    emit toLog(LogInfo, tr("Порт %1: Установлена четность %2.").arg(port.portName()).arg(str));
     return true;
 }
 //=======================================================================================================
@@ -264,7 +264,7 @@ bool ComPort::setDtr(bool on)
         emit toLog(LogError, _lastError);
         return false;
     }
-    toLog(LogInfo, tr("Порт %1: Установлен DTR = %2.").arg(port.portName()).arg(str));
+    emit toLog(LogInfo, tr("Порт %1: Установлен DTR = %2.").arg(port.portName()).arg(str));
     return true;
 }
 //=======================================================================================================
@@ -276,7 +276,7 @@ bool ComPort::setRts(bool on)
         emit toLog(LogError, _lastError);
         return false;
     }
-    toLog(LogInfo, tr("Порт %1: Установлен RTS = %2.").arg(port.portName()).arg(str));
+    emit toLog(LogInfo, tr("Порт %1: Установлен RTS = %2.").arg(port.portName()).arg(str));
     return true;
 }
 //=======================================================================================================
@@ -293,7 +293,7 @@ bool ComPort::clear(QSerialPort::Directions directions)
         emit toLog(LogError, _lastError);
         return false;
     }
-    toLog(LogInfo, tr("Порт %1: Очищен буфер %2.").arg(port.portName()).arg(str));
+    emit toLog(LogInfo, tr("Порт %1: Очищен буфер %2.").arg(port.portName()).arg(str));
     return true;
 }
 //=======================================================================================================
