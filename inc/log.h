@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2018 Evgeny Teterin (nayk) <sutcedortal@gmail.com>
+** Copyright (c) 2019 Evgeny Teterin (nayk) <sutcedortal@gmail.com>
 ** All right reserved.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining
