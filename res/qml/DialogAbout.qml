@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.2
 import "Theme.js" as Theme;
 
 Dialog {
-    id: _dialogAbout
+    id: root
     title: qsTr("About")
     property alias applicationName: _textTitle.text
     property alias version: _textVersion.text
@@ -94,7 +94,7 @@ Dialog {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
             text: qsTr("Close")
-            onClicked: _dialogAbout.close()
+            onClicked: root.close()
         }
     }
 }

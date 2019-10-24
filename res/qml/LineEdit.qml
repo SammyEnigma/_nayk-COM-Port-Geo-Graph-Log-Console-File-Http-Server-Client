@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 TextField {
-    id: _textField
+    id: root
     font.pointSize: Theme.fontPointSize
     text: ""
     padding: 5

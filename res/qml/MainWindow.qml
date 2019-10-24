@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 ApplicationWindow {
-    id: _appWindow
+    id: root
     visible: true
     width: 640
     height: 480

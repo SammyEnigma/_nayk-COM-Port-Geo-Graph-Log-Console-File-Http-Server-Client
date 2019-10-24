@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.2
 import "Theme.js" as Theme;
 
 LineEditWithButton {
-    id: _lineEdit
+    id: root
     buttonText: qsTr("...")
     onButtonClicked: _fileDialog.open()
     property alias dialogTitle: _fileDialog.title
@@ -26,7 +26,7 @@ LineEditWithButton {
         selectExisting: true
         selectFolder: false
         onAccepted: {
-            _lineEdit.text = _fileDialog.fileUrl
+            root.text = _fileDialog.fileUrl
         }
     }
 }

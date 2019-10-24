@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 LineEdit {
-    id: _lineEdit
+    id: root
     rightPadding: _toolButton.width + 10
     property alias buttonText: _toolButton.text
     signal buttonClicked()
@@ -18,12 +18,12 @@ LineEdit {
         anchors.rightMargin: Theme.borderWidth + 1
         text: qsTr("...")
         onClicked: {
-            _lineEdit.buttonClicked()
+            root.buttonClicked()
         }
 
         font.pointSize: Theme.fontPointSize
-        implicitHeight: _lineEdit.height - 2 * Theme.borderWidth - 2
-        implicitWidth: _lineEdit.height
+        implicitHeight: root.height - 2 * Theme.borderWidth - 2
+        implicitWidth: root.height
         opacity: enabled ? 1.0 : 0.3
 
         contentItem: Text {

@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 ToolBar {
-    id: _toolBar
+    id: root
     width: parent.width
     height: Theme.itemHeight
     property alias titleText: _labelTitle.text
@@ -20,13 +20,7 @@ ToolBar {
 
         RowLayout {
             anchors.fill: parent
-            /*
-            ToolButton {
-                id: _toolButtonBack
-                text: qsTr("‹")
-                onClicked: stack.pop()
-            }
-            */
+
             Label {
                 id: _labelTitle
                 text: qsTr("Application Title")
@@ -43,7 +37,7 @@ ToolBar {
                 text: qsTr("⋮")
                 font.pixelSize: Theme.fontPixelSize
                 onClicked: {
-                    _toolBar.menuButtonClick()
+                    root.menuButtonClick()
                 }
 
                 contentItem: Text {
@@ -57,7 +51,7 @@ ToolBar {
                 }
 
                 background: Rectangle {
-                    implicitWidth: _toolBar.height
+                    implicitWidth: root.height
                     color: _contentItemToolBar.color
                 }
             }
