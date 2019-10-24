@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 Menu {
-    font.pixelSize: Theme.fontPixelSize
+    font.pointSize: Theme.fontPointSize
 
     background: Rectangle {
         color: Theme.bgColorDark

@@ -6,13 +6,13 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 ApplicationWindow {
-    id: appWindow
+    id: _appWindow
     visible: true
     width: 640
     height: 480
     color: Theme.bgColor
     title: qsTr("Application Title")
-    font.pixelSize: Theme.fontPixelSize
+    font.pointSize: Theme.fontPointSize
 
     palette {
         alternateBase: Theme.bgColorAlternate

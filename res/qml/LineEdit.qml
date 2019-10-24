@@ -5,14 +5,14 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 TextField {
-    id: textField
-    font.pixelSize: Theme.fontPixelSize
+    id: _textField
+    font.pointSize: Theme.fontPointSize
     text: ""
     padding: 5
     horizontalAlignment: Qt.AlignLeft
     verticalAlignment: Qt.AlignVCenter
     implicitWidth: 200
-    implicitHeight: Theme.fontPixelSize * 2 + 6
+    implicitHeight: Theme.itemHeight
     opacity: enabled ? 1.0 : 0.3
     color: Theme.textColor
     placeholderTextColor: Theme.bgColorLight

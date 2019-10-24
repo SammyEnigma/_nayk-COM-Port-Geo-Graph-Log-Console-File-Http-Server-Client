@@ -3,8 +3,8 @@ import QtQuick.Controls 2.12
 import "Theme.js" as Theme;
 
 Text {
-    id: textLabel
+    id: _textLabel
     property bool light: false
     color: light ? Theme.textColorLight : Theme.textColor
-    font.pixelSize: Theme.fontPixelSize
+    font.pointSize: Theme.fontPointSize
 }

@@ -5,16 +5,16 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 ToolBar {
-    id: toolBar
+    id: _toolBar
     width: parent.width
-    height: Theme.fontPixelSize * 2 + 8
-    property alias titleText: labelTitle.text
-    property alias menuButtonX: toolButtonMenu.x
-    property alias menuButtonY: toolButtonMenu.y
+    height: Theme.itemHeight
+    property alias titleText: _labelTitle.text
+    property alias menuButtonX: _toolButtonMenu.x
+    property alias menuButtonY: _toolButtonMenu.y
     signal menuButtonClick()
 
     contentItem: Rectangle {
-        id: contentItemToolBar
+        id: _contentItemToolBar
         color: Theme.bgColorLight
         anchors.fill: parent
 
@@ -22,34 +22,34 @@ ToolBar {
             anchors.fill: parent
             /*
             ToolButton {
-                id: toolButtonBack
+                id: _toolButtonBack
                 text: qsTr("‹")
                 onClicked: stack.pop()
             }
             */
             Label {
-                id: labelTitle
+                id: _labelTitle
                 text: qsTr("Application Title")
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
                 color: Theme.textColorLight
-                font.pixelSize: Theme.fontPixelSize
+                font.pointSize: Theme.fontPointSize
             }
 
             ToolButton {
-                id: toolButtonMenu
+                id: _toolButtonMenu
                 text: qsTr("⋮")
                 font.pixelSize: Theme.fontPixelSize
                 onClicked: {
-                    toolBar.menuButtonClick()
+                    _toolBar.menuButtonClick()
                 }
 
                 contentItem: Text {
-                    text: toolButtonMenu.text
-                    font: toolButtonMenu.font
-                    color: toolButtonMenu.down ? Theme.colorHighlight : Theme.textColorLight
+                    text: _toolButtonMenu.text
+                    font: _toolButtonMenu.font
+                    color: _toolButtonMenu.down ? Theme.colorHighlight : Theme.textColorLight
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     elide: Text.ElideRight
@@ -57,8 +57,8 @@ ToolBar {
                 }
 
                 background: Rectangle {
-                    implicitWidth: toolBar.height
-                    color: contentItemToolBar.color
+                    implicitWidth: _toolBar.height
+                    color: _contentItemToolBar.color
                 }
             }
         }

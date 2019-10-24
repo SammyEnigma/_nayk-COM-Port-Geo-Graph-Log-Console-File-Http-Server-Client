@@ -13,5 +13,6 @@ var menuHighlight    = "#005671"
 var shadow           = "black"
 var buttonRadius     = 8
 var borderWidth      = 1
-var fontPixelSize    = 16
+var fontPointSize    = 12
 var menuWidth        = 200
+var itemHeight       = 38

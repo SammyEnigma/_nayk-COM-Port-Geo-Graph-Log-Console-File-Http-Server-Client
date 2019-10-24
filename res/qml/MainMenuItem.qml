@@ -5,17 +5,17 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 MenuItem {
-    id: menuItem
+    id: _menuItem
     implicitWidth: Theme.menuWidth
-    implicitHeight: Theme.fontPixelSize * 2 + 6
+    implicitHeight: Theme.itemHeight
 
     contentItem: Text {
-        leftPadding: menuItem.implicitHeight
-        rightPadding: menuItem.implicitHeight
-        text: menuItem.text
-        font: menuItem.font
+        leftPadding: _menuItem.implicitHeight
+        rightPadding: _menuItem.implicitHeight
+        text: _menuItem.text
+        font: _menuItem.font
         opacity: enabled ? 1.0 : 0.3
-        color: menuItem.highlighted ? Theme.textColorLight : Theme.textColor
+        color: _menuItem.highlighted ? Theme.textColorLight : Theme.textColor
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
@@ -24,7 +24,7 @@ MenuItem {
     background: Rectangle {
         anchors.fill: parent
         anchors.margins: 4
-        color: menuItem.highlighted ? Theme.menuHighlight : "transparent"
+        color: _menuItem.highlighted ? Theme.menuHighlight : "transparent"
         radius: Theme.buttonRadius - 2
     }
 }

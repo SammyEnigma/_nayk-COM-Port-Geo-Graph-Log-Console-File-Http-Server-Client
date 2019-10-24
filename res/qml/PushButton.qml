@@ -5,15 +5,15 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 Button {
-    id: button
+    id: _button
     text: qsTr("Button")
-    font.pixelSize: Theme.fontPixelSize
+    font.pointSize: Theme.fontPointSize
     opacity: enabled ? 1.0 : 0.3
 
     contentItem: Text {
-        text: button.text
-        font: button.font
-        color: button.down ? Theme.colorHighlight : Theme.textColorLight
+        text: _button.text
+        font: _button.font
+        color: _button.down ? Theme.colorHighlight : Theme.textColorLight
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
@@ -21,9 +21,9 @@ Button {
 
     background: Rectangle {
         implicitWidth: 100
-        implicitHeight: Theme.fontPixelSize * 2 + 6
-        color: button.hovered ? (button.down ? Theme.bgColorDark : Theme.menuHighlight) : Theme.bgColorLight
-        border.color: button.down ? Theme.colorHighlight : Theme.borderColor
+        implicitHeight: Theme.itemHeight
+        color: _button.hovered ? (_button.down ? Theme.bgColorDark : Theme.menuHighlight) : Theme.bgColorLight
+        border.color: _button.down ? Theme.colorHighlight : Theme.borderColor
         border.width: Theme.borderWidth
         radius: Theme.buttonRadius
     }

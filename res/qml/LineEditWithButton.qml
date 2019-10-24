@@ -5,31 +5,31 @@ import QtQuick.Layouts 1.12
 import "Theme.js" as Theme;
 
 LineEdit {
-    id: lineEdit
-    rightPadding: toolButton.width + 10
-    property alias buttonText: toolButton.text
+    id: _lineEdit
+    rightPadding: _toolButton.width + 10
+    property alias buttonText: _toolButton.text
     signal buttonClicked()
 
     ToolButton {
-        id: toolButton
+        id: _toolButton
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: Theme.borderWidth + 1
         anchors.rightMargin: Theme.borderWidth + 1
         text: qsTr("...")
         onClicked: {
-            lineEdit.buttonClicked()
+            _lineEdit.buttonClicked()
         }
 
-        font.pixelSize: Theme.fontPixelSize
-        implicitHeight: lineEdit.height - 2 * Theme.borderWidth - 2
-        implicitWidth: lineEdit.height
+        font.pointSize: Theme.fontPointSize
+        implicitHeight: _lineEdit.height - 2 * Theme.borderWidth - 2
+        implicitWidth: _lineEdit.height
         opacity: enabled ? 1.0 : 0.3
 
         contentItem: Text {
-            text: toolButton.text
-            font: toolButton.font
-            color: toolButton.down ? Theme.colorHighlight : Theme.textColorLight
+            text: _toolButton.text
+            font: _toolButton.font
+            color: _toolButton.down ? Theme.colorHighlight : Theme.textColorLight
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -37,7 +37,7 @@ LineEdit {
 
         background: Rectangle {
             anchors.fill: parent
-            color: toolButton.hovered ? (toolButton.down ? Theme.bgColorDark : Theme.menuHighlight) : Theme.bgColorLight
+            color: _toolButton.hovered ? (_toolButton.down ? Theme.bgColorDark : Theme.menuHighlight) : Theme.bgColorLight
             border.color: Theme.menuHighlight
             border.width: 1
             radius: Theme.buttonRadius - 3

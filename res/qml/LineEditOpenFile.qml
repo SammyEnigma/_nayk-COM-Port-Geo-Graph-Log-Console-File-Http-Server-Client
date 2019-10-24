@@ -6,19 +6,19 @@ import QtQuick.Dialogs 1.2
 import "Theme.js" as Theme;
 
 LineEditWithButton {
-    id: lineEdit
+    id: _lineEdit
     buttonText: qsTr("...")
-    onButtonClicked: fileDialog.open()
-    property alias dialogTitle: fileDialog.title
-    property alias folder: fileDialog.folder
-    property alias defaultSuffix: fileDialog.defaultSuffix
-    property alias nameFilters: fileDialog.nameFilters
-    property alias nameFilterIndex: fileDialog.selectedNameFilterIndex
-    property alias selectedNameFilter: fileDialog.selectedNameFilter
-    property alias selectExisting: fileDialog.selectExisting
+    onButtonClicked: _fileDialog.open()
+    property alias dialogTitle: _fileDialog.title
+    property alias folder: _fileDialog.folder
+    property alias defaultSuffix: _fileDialog.defaultSuffix
+    property alias nameFilters: _fileDialog.nameFilters
+    property alias nameFilterIndex: _fileDialog.selectedNameFilterIndex
+    property alias selectedNameFilter: _fileDialog.selectedNameFilter
+    property alias selectExisting: _fileDialog.selectExisting
 
     FileDialog {
-        id: fileDialog
+        id: _fileDialog
         title: qsTr("Please choose a file")
         nameFilters: [ qsTr("All files (*)") ]
         folder: shortcuts.home
@@ -26,7 +26,7 @@ LineEditWithButton {
         selectExisting: true
         selectFolder: false
         onAccepted: {
-            lineEdit.text = fileDialog.fileUrl
+            _lineEdit.text = _fileDialog.fileUrl
         }
     }
 }
