@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>LineEdit.qml</file>
+        <file>PushButton.qml</file>
+        <file>MainWindow.qml</file>
+        <file>TextLabel.qml</file>
+        <file>MainMenu.qml</file>
+        <file>MainMenuItem.qml</file>
+        <file>MainMenuSeparator.qml</file>
+        <file>LineEditOpenFile.qml</file>
+        <file>LineEditWithButton.qml</file>
+        <file>PanelButton.qml</file>
+        <file>ToolPanel.qml</file>
+        <file>png/about.png</file>
+        <file>png/ask_question.png</file>
+        <file>png/attention.png</file>
+        <file>png/cancel.png</file>
+        <file>png/delete_message.png</file>
+        <file>png/info.png</file>
+        <file>png/ok.png</file>
+        <file>Style.js</file>
+    </qresource>
+</RCC>

@@ -1,13 +1,11 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.12
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.2
-import "Theme.js" as Theme;
+import "Style.js" as Style
 
 LineEditWithButton {
     id: root
-    buttonText: qsTr("...")
+    buttonText: "..."
     onButtonClicked: _fileDialog.open()
     property alias dialogTitle: _fileDialog.title
     property alias folder: _fileDialog.folder
@@ -16,6 +14,7 @@ LineEditWithButton {
     property alias nameFilterIndex: _fileDialog.selectedNameFilterIndex
     property alias selectedNameFilter: _fileDialog.selectedNameFilter
     property alias selectExisting: _fileDialog.selectExisting
+    property alias selectFolder: _fileDialog.selectFolder
 
     FileDialog {
         id: _fileDialog
