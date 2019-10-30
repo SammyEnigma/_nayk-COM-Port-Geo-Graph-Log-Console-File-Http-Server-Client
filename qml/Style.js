@@ -3,27 +3,32 @@
 // theme variant:
 var darkTheme              = true
 // normal font settings:
-var fontPointSize          = 12
-var smallFontPointSize     = Math.max(8, fontPointSize - 2)
-var bigFontPointSize       = fontPointSize + 2
+var fontPointSize          = 13
+var smallFontPointSize     = Math.max(8, fontPointSize - 4)
+var bigFontPointSize       = fontPointSize + 4
 // default controls settings:
 var itemWidth              = 200
 var itemHeight             = 38
 var editorBorder           = 1
 var buttonBorder           = 1
 var buttonRadius           = 8
-var buttonWidth            = 160
-var buttonHeight           = 38
+var buttonWidth            = 140
+var buttonHeight           = 48
+var buttonIconSize         = 32
 var minPadding             = 5
 var disabledControlOpacity = 0.3
 // color settings:
-var bgColor                = darkTheme ? "#02222c" : "#b6bfc2"
+var accent                 = darkTheme ? "#0084ad" : "#0084ad"
+var primary                = darkTheme ? "#072e3a" : "#8aa5ad"
+var foreground             = darkTheme ? "#bbd1d6" : "#02222c"
+var background             = darkTheme ? "#02222c" : "#b6bfc2"
+var bgColor                = background
 var bgDarkColor            = darkTheme ? "#02161c" : "#d7dddf"
-var bgLightColor           = darkTheme ? "#072e3a" : "#8aa5ad"
+var bgLightColor           = primary
 var bgAlternateColor       = darkTheme ? "#092e3a" : "#adbabe"
-var textColor              = darkTheme ? "#aac1c6" : "#02222c"
+var textColor              = foreground
 var textDarkColor          = darkTheme ? "#647174" : "black"
-var textLightColor         = darkTheme ? "white" : "white"
+var textLightColor         = darkTheme ? "white"   : "white"
 var highlightColor         = darkTheme ? "#89e3ff" : "#89e3ff"
 var borderColor            = darkTheme ? "#95c5d0" : "#244f58"
 var menuHighlightColor     = darkTheme ? "#005671" : "#005671"

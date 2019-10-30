@@ -1,10 +1,10 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.12
 import QtQuick.Dialogs 1.2
-import "Style.js" as Style
 
-LineEditWithButton {
+LineEdit {
     id: root
+    buttonVisible: true
     buttonText: "..."
     onButtonClicked: _fileDialog.open()
     property alias dialogTitle: _fileDialog.title

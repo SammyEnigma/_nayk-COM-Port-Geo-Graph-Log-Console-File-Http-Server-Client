@@ -1,27 +1,23 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.12
-import "Style.js" as Style
 
 TextField {
     id: root
-    implicitWidth: Style.itemWidth
-    implicitHeight: Style.itemHeight
-    font.pointSize: Style.fontPointSize
-    text: ""
-    padding: Style.minPadding
-    horizontalAlignment: Qt.AlignLeft
-    verticalAlignment: Qt.AlignVCenter
-    opacity: enabled ? 1.0 : Style.disabledControlOpacity
-    color: Style.textColor
-    placeholderTextColor: Style.bgLightColor
-    selectionColor: Style.menuHighlightColor
-    selectedTextColor: Style.textLightColor
+    rightPadding: _toolButton.visible ? _toolButton.width + leftPadding : leftPadding
+    property alias buttonVisible: _toolButton.visible
+    property alias buttonText: _toolButton.text
+    signal buttonClicked()
 
-    background: Rectangle {
-        anchors.fill: parent
-        color: Style.bgDarkColor
-        border.color: Style.borderColor
-        border.width: Style.editorBorder
-        radius: Math.max(0, Style.buttonRadius - 2)
+    ToolButton {
+        id: _toolButton
+        height: root.height - 4
+        width: root.height
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 2
+        anchors.rightMargin: 2
+        text: "..."
+        onClicked: root.buttonClicked()
+        visible: false
     }
 }

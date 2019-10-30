@@ -2,8 +2,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.12
 import "Style.js" as Style
 
-Text {
+PushButton {
     id: root
-    color: Style.textColor
-    font.pointSize: Style.fontPointSize
+    text: qsTr("Yes")
+    icon.source: "qrc:/png/ok.png"
 }
