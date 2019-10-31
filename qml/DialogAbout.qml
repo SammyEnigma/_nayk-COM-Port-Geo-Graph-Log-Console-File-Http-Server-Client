@@ -44,7 +44,7 @@ Dialog {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: (parent.width - width - _title.contentWidth - 40) / 2
-                source: "qrc:/png/about.png"
+                source: "qrc:/images/information.png"
                 horizontalAlignment: Image.AlignHCenter
                 verticalAlignment: Image.AlignVCenter
                 visible: source !== ""

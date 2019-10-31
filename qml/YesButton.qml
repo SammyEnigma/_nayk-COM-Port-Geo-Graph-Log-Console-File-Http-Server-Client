@@ -5,5 +5,5 @@ import "Style.js" as Style
 PushButton {
     id: root
     text: qsTr("Yes")
-    icon.source: "qrc:/png/ok.png"
+    icon.source: "qrc:/images/ok.png"
 }
