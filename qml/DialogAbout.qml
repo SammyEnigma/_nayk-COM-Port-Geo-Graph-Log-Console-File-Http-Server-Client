@@ -1,3 +1,27 @@
+/****************************************************************************
+** Copyright (c) 2019 Evgeny Teterin (nayk) <sutcedortal@gmail.com>
+** All right reserved.
+**
+** Permission is hereby granted, free of charge, to any person obtaining
+** a copy of this software and associated documentation files (the
+** "Software"), to deal in the Software without restriction, including
+** without limitation the rights to use, copy, modify, merge, publish,
+** distribute, sublicense, and/or sell copies of the Software, and to
+** permit persons to whom the Software is furnished to do so, subject to
+** the following conditions:
+**
+** The above copyright notice and this permission notice shall be
+** included in all copies or substantial portions of the Software.
+**
+** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+**
+****************************************************************************/
 import QtQuick 2.13
 import QtQuick.Controls 2.12
 import QtQuick.Dialogs 1.2
@@ -34,16 +58,23 @@ Dialog {
             id: _headerItem
             height: 64
             width: parent.width
-            anchors.top: parent.top
-            anchors.topMargin: 30
+
+            anchors {
+                top: parent.top
+                topMargin: 30
+            }
 
             Image {
                 id: _img
                 height: parent.height
                 width: height
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: (parent.width - width - _title.contentWidth - 40) / 2
+
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                    leftMargin: (parent.width - width - _title.contentWidth - 40) / 2
+                }
+
                 source: "qrc:/images/information.png"
                 horizontalAlignment: Image.AlignHCenter
                 verticalAlignment: Image.AlignVCenter
@@ -54,24 +85,35 @@ Dialog {
             TextLabel {
                 id: _title
                 height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: _img.visible ? _img.right : parent.left
-                anchors.leftMargin: _img.visible ? 20 : (parent.width - contentWidth) / 2
+
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: _img.visible ? _img.right : parent.left
+                    leftMargin: _img.visible ? 20 : (parent.width - contentWidth) / 2
+                }
+
                 text: qsTr("Application Title")
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
-                font.pointSize: Style.bigFontPointSize
-                font.bold: true
                 color: Style.textLightColor
+
+                font {
+                    pointSize: Style.bigFontPointSize
+                    bold: true
+                }
             }
         }
 
         Row {
             id: _rowVersion
-            anchors.top: _headerItem.bottom
-            anchors.left: parent.left
-            anchors.leftMargin: (parent.width - _labelVersion.width - _textVersion.width) / 2
-            anchors.topMargin: 30
+
+            anchors {
+                top: _headerItem.bottom
+                left: parent.left
+                leftMargin: (parent.width - _labelVersion.width - _textVersion.width) / 2
+                topMargin: 30
+            }
+
             spacing: 10
             visible: _textVersion.text !== ""
 
@@ -98,8 +140,12 @@ Dialog {
 
         Row {
             id: _rowDate
-            anchors.top: _rowVersion.visible ? _rowVersion.bottom : _rowVersion.top
-            anchors.left: _rowVersion.left
+
+            anchors {
+                top: _rowVersion.visible ? _rowVersion.bottom : _rowVersion.top
+                left: _rowVersion.left
+            }
+
             spacing: 10
             visible: _textDate.text !== ""
 
@@ -126,8 +172,12 @@ Dialog {
 
         Row {
             id: _rowAuthor
-            anchors.top: _rowDate.visible ? _rowDate.bottom : _rowDate.top
-            anchors.left: _rowDate.left
+
+            anchors {
+                top: _rowDate.visible ? _rowDate.bottom : _rowDate.top
+                left: _rowDate.left
+            }
+
             spacing: 10
             visible: _textAuthor.text !== ""
 
@@ -154,8 +204,12 @@ Dialog {
 
         Row {
             id: _rowMail
-            anchors.top: _rowAuthor.visible ? _rowAuthor.bottom : _rowAuthor.top
-            anchors.left: _rowAuthor.left
+
+            anchors {
+                top: _rowAuthor.visible ? _rowAuthor.bottom : _rowAuthor.top
+                left: _rowAuthor.left
+            }
+
             spacing: 10
             visible: root.applicationMail !== ""
 
@@ -172,8 +226,12 @@ Dialog {
                 id: _textMail
                 width: _textVersion.width
                 height: _labelVersion.height
-                font.bold: true
-                font.underline: false
+
+                font {
+                    bold: true
+                    underline: false
+                }
+
                 text: "<a href=\"mailto:" + root.applicationMail + "\">" + root.applicationMail + "</a>"
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
@@ -191,8 +249,12 @@ Dialog {
 
         Row {
             id: _rowUrl
-            anchors.top: _rowMail.visible ? _rowMail.bottom : _rowMail.top
-            anchors.left: _rowMail.left
+
+            anchors {
+                top: _rowMail.visible ? _rowMail.bottom : _rowMail.top
+                left: _rowMail.left
+            }
+
             spacing: 10
             visible: root.applicationUrl !== ""
 
@@ -209,8 +271,12 @@ Dialog {
                 id: _textUrl
                 width: _textVersion.width
                 height: _labelVersion.height
-                font.bold: true
-                font.underline: false
+
+                font {
+                    bold: true
+                    underline: false
+                }
+
                 text: "<a href=\"" + root.applicationUrl + "\">" + root.applicationUrl + "</a>"
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
@@ -228,11 +294,15 @@ Dialog {
 
         TextArea {
             id: _descriptionEdit
-            anchors.top: _rowUrl.visible ? _rowUrl.bottom : _rowUrl.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: _btn.top
-            anchors.topMargin: 40
-            anchors.bottomMargin: 40
+
+            anchors {
+                top: _rowUrl.visible ? _rowUrl.bottom : _rowUrl.top
+                horizontalCenter: parent.horizontalCenter
+                bottom: _btn.top
+                topMargin: 40
+                bottomMargin: 40
+            }
+
             width: parent.width - 40
             text: ""
             visible: text !== ""
@@ -241,9 +311,13 @@ Dialog {
 
         OkButton {
             id: _btn
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
+
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+                bottomMargin: 20
+            }
+
             onClicked: root.close()
         }
     }

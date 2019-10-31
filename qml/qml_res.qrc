@@ -20,5 +20,6 @@
         <file>images/ok.png</file>
         <file>images/question.png</file>
         <file>images/warning.png</file>
+        <file>TextLines.qml</file>
     </qresource>
 </RCC>

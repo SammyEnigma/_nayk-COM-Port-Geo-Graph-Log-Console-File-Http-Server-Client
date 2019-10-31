@@ -1,3 +1,27 @@
+/****************************************************************************
+** Copyright (c) 2019 Evgeny Teterin (nayk) <sutcedortal@gmail.com>
+** All right reserved.
+**
+** Permission is hereby granted, free of charge, to any person obtaining
+** a copy of this software and associated documentation files (the
+** "Software"), to deal in the Software without restriction, including
+** without limitation the rights to use, copy, modify, merge, publish,
+** distribute, sublicense, and/or sell copies of the Software, and to
+** permit persons to whom the Software is furnished to do so, subject to
+** the following conditions:
+**
+** The above copyright notice and this permission notice shall be
+** included in all copies or substantial portions of the Software.
+**
+** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+**
+****************************************************************************/
 import QtQuick 2.13
 import QtQuick.Controls 2.12
 import QtQuick.Dialogs 1.2
@@ -8,7 +32,6 @@ import "Style.js" as Style
 
 AbstractMessageDialog {
     id: root
-
 
     Pane {
         id: _content
@@ -23,12 +46,13 @@ AbstractMessageDialog {
         Material.foreground: Style.foreground
         Material.background: Style.background
 
-        implicitHeight: _contentColumn.implicitHeight + defOuterSpacing * 2
+        implicitHeight: _contentColumn.implicitHeight + defOuterSpacing * 3
         onImplicitHeightChanged: root.height = implicitHeight
         implicitWidth: Math.min(root.__maximumDimension, Math.max(
             _mainText.implicitWidth, buttonsRowImplicitWidth) + defOuterSpacing * 2);
         onImplicitWidthChanged: root.width = implicitWidth
         focus: root.visible
+
         Keys.onPressed: {
             event.accepted = true
             if (event.modifiers === Qt.ControlModifier)
@@ -73,20 +97,25 @@ AbstractMessageDialog {
 
                 TextLabel {
                     id: _mainText
+
                     anchors {
                         left: _icon.right
                         leftMargin: _content.defSpacing * 2
                         right: parent.right
                     }
+
+                    font {
+                        pointSize: Style.fontPointSize + 2
+                        weight: Font.Bold
+                    }
+
                     text: root.text
-                    font.pointSize: Style.fontPointSize + 2
-                    font.weight: Font.Bold
                     wrapMode: Text.WordWrap
-                    renderType: Utils.isMobile ? Text.QtRendering : Text.NativeRendering
                 }
 
                 TextLabel {
                     id: _informativeText
+
                     anchors {
                         left: _icon.right
                         right: parent.right
@@ -94,9 +123,9 @@ AbstractMessageDialog {
                         leftMargin: _content.defSpacing * 2
                         topMargin: _content.defSpacing
                     }
+
                     text: root.informativeText
                     wrapMode: Text.WordWrap
-                    renderType: Utils.isMobile ? Text.QtRendering : Text.NativeRendering
                 }
             }
 
@@ -107,6 +136,7 @@ AbstractMessageDialog {
                 layoutDirection: Qt.RightToLeft
                 width: parent.width - _content.defOuterSpacing
                 x: -_content.defOuterSpacing
+
                 Button {
                     id: _okButton
                     text: qsTr("OK")
@@ -212,7 +242,7 @@ AbstractMessageDialog {
                 Button {
                     id: _moreButton
                     text: qsTr("Show Details...")
-                    onClicked: content.state = (content.state === "" ? "expanded" : "")
+                    onClicked: _content.state = (_content.state === "" ? "expanded" : "")
                     visible: root.detailedText.length > 0
                 }
                 Button {
@@ -221,6 +251,7 @@ AbstractMessageDialog {
                     onClicked: root.click(StandardButton.Help)
                     visible: root.standardButtons & StandardButton.Help
                 }
+
                 onVisibleChildrenChanged: calculateImplicitWidth()
             }
         }
@@ -244,19 +275,20 @@ AbstractMessageDialog {
             Flickable {
                 id: _flickable
                 contentHeight: _detailedText.height
-                anchors.fill: parent
-                anchors.topMargin: _content.defSpacing
-                anchors.bottomMargin: _content.defOuterSpacing
 
-                TextEdit {
+                anchors {
+                    fill: parent
+                    topMargin: _content.defSpacing
+                    bottomMargin: _content.defOuterSpacing
+                }
+
+                TextLines {
                     id: _detailedText
-                    color: Style.textColor
                     text: root.detailedText
                     width: _details.width
                     wrapMode: Text.WordWrap
                     readOnly: true
                     selectByMouse: true
-                    renderType: Utils.isMobile ? Text.QtRendering : Text.NativeRendering
                 }
             }
         }
@@ -271,7 +303,7 @@ AbstractMessageDialog {
                 PropertyChanges {
                     target: _content
                     implicitHeight: _contentColumn.implicitHeight + _content.defSpacing * 2 +
-                        _detailedText.implicitHeight + _content.defOuterSpacing * 2
+                        _detailedText.implicitHeight + _content.defOuterSpacing * 3
                 }
                 PropertyChanges {
                     target: _moreButton
@@ -280,6 +312,7 @@ AbstractMessageDialog {
             }
         ]
     }
+
     function calculateImplicitWidth() {
         if (_buttons.visibleChildren.length < 2)
             return;
@@ -288,6 +321,7 @@ AbstractMessageDialog {
             calcWidth += Math.max(100, _buttons.visibleChildren[i].implicitWidth) + _content.defSpacing
         _content.buttonsRowImplicitWidth = _content.defOuterSpacing + calcWidth
     }
+
     Component.onCompleted: calculateImplicitWidth()
 }
 

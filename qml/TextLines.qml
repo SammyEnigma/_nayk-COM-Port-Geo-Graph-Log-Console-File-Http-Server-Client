@@ -24,10 +24,11 @@
 ****************************************************************************/
 import QtQuick 2.13
 import QtQuick.Controls 2.12
+import Utils 1.0
 import "Style.js" as Style
 
-PushButton {
-    id: root
-    text: qsTr("Yes")
-    icon.source: "qrc:/images/ok.png"
+TextEdit {
+    color: Style.textColor
+    font.pointSize: Style.fontPointSize
+    renderType: Utils.isMobile ? Text.QtRendering : Text.NativeRendering
 }
