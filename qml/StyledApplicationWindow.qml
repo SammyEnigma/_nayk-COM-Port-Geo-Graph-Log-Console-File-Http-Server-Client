@@ -24,18 +24,18 @@
 ****************************************************************************/
 import QtQuick 2.13
 import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
 import Utils 1.0
 import "Style.js" as Style
 
-Button {
+ApplicationWindow {
     id: root
-    text: "Button"
+    visible: true
+    title: "Application Title"
 
-    icon {
-        height: Utils.dp( Style.buttonIconSize )
-        width: Utils.dp( Style.buttonIconSize )
-    }
-
-    implicitWidth: Utils.dp( Style.buttonWidth )
-    implicitHeight: Utils.dp( Style.buttonHeight )
+    Material.theme: Style.darkTheme ? Material.Dark : Material.Normal
+    Material.accent: Style.accent
+    Material.primary: Style.primary
+    Material.foreground: Style.foreground
+    Material.background: Style.background
 }

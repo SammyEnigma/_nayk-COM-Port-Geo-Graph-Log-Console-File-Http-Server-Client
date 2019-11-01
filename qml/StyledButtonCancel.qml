@@ -24,17 +24,12 @@
 ****************************************************************************/
 import QtQuick 2.13
 import QtQuick.Controls 2.12
-import QtQuick.Controls.Material 2.12
+import Utils 1.0
 import "Style.js" as Style
 
-ApplicationWindow {
+StyledButton {
     id: root
-    visible: true
-    title: "Application Title"
-
-    Material.theme: Style.darkTheme ? Material.Dark : Material.Normal
-    Material.accent: Style.accent
-    Material.primary: Style.primary
-    Material.foreground: Style.foreground
-    Material.background: Style.background
+    text: qsTr("Cancel")
+    icon.source: "qrc:/images/cancel.png"
+    implicitWidth: Utils.dp( Style.buttonWidth )
 }

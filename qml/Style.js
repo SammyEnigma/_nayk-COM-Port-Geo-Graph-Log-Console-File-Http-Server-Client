@@ -31,9 +31,8 @@ var fontPointSize          = 13
 var smallFontPointSize     = Math.max(8, fontPointSize - 4)
 var bigFontPointSize       = fontPointSize + 4
 // default controls settings:
-var buttonWidth            = 140
-var buttonHeight           = 48
-var buttonIconSize         = 32
+var buttonWidth            = 130
+var buttonHeight           = 56
 var disabledControlOpacity = 0.3
 // color settings:
 var accent                 = darkTheme ? "#0084ad" : "#0084ad"

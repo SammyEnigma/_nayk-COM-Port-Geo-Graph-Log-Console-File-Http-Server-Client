@@ -33,18 +33,12 @@ import "Style.js" as Style
 AbstractMessageDialog {
     id: root
 
-    Pane {
+    StyledPane {
         id: _content
 
         property real defSpacing: Utils.dp(8)
         property real defOuterSpacing: Utils.dp(16)
         property real buttonsRowImplicitWidth: Screen.pixelDensity * 50
-
-        Material.theme: Style.darkTheme ? Material.Dark : Material.Normal
-        Material.accent: Style.accent
-        Material.primary: Style.primary
-        Material.foreground: Style.foreground
-        Material.background: Style.background
 
         implicitHeight: _contentColumn.implicitHeight + defOuterSpacing * 3
         onImplicitHeightChanged: root.height = implicitHeight
@@ -95,7 +89,7 @@ AbstractMessageDialog {
                     source: root.standardIconSource
                 }
 
-                TextLabel {
+                StyledText {
                     id: _mainText
 
                     anchors {
@@ -111,9 +105,10 @@ AbstractMessageDialog {
 
                     text: root.text
                     wrapMode: Text.WordWrap
+                    color: Style.textLightColor
                 }
 
-                TextLabel {
+                StyledText {
                     id: _informativeText
 
                     anchors {
@@ -137,115 +132,115 @@ AbstractMessageDialog {
                 width: parent.width - _content.defOuterSpacing
                 x: -_content.defOuterSpacing
 
-                Button {
+                StyledButton {
                     id: _okButton
                     text: qsTr("OK")
                     onClicked: root.click(StandardButton.Ok)
                     visible: root.standardButtons & StandardButton.Ok
                 }
-                Button {
+                StyledButton {
                     id: _openButton
                     text: qsTr("Open")
                     onClicked: root.click(StandardButton.Open)
                     visible: root.standardButtons & StandardButton.Open
                 }
-                Button {
+                StyledButton {
                     id: _saveButton
                     text: qsTr("Save")
                     onClicked: root.click(StandardButton.Save)
                     visible: root.standardButtons & StandardButton.Save
                 }
-                Button {
+                StyledButton {
                     id: _saveAllButton
                     text: qsTr("Save All")
                     onClicked: root.click(StandardButton.SaveAll)
                     visible: root.standardButtons & StandardButton.SaveAll
                 }
-                Button {
+                StyledButton {
                     id: _retryButton
                     text: qsTr("Retry")
                     onClicked: root.click(StandardButton.Retry)
                     visible: root.standardButtons & StandardButton.Retry
                 }
-                Button {
+                StyledButton {
                     id: _ignoreButton
                     text: qsTr("Ignore")
                     onClicked: root.click(StandardButton.Ignore)
                     visible: root.standardButtons & StandardButton.Ignore
                 }
-                Button {
+                StyledButton {
                     id: applyButton
                     text: qsTr("Apply")
                     onClicked: root.click(StandardButton.Apply)
                     visible: root.standardButtons & StandardButton.Apply
                 }
-                Button {
+                StyledButton {
                     id: _yesButton
                     text: qsTr("Yes")
                     onClicked: root.click(StandardButton.Yes)
                     visible: root.standardButtons & StandardButton.Yes
                 }
-                Button {
+                StyledButton {
                     id: _yesAllButton
                     text: qsTr("Yes to All")
                     onClicked: root.click(StandardButton.YesToAll)
                     visible: root.standardButtons & StandardButton.YesToAll
                 }
-                Button {
+                StyledButton {
                     id: _noButton
                     text: qsTr("No")
                     onClicked: root.click(StandardButton.No)
                     visible: root.standardButtons & StandardButton.No
                 }
-                Button {
+                StyledButton {
                     id: _noAllButton
                     text: qsTr("No to All")
                     onClicked: root.click(StandardButton.NoToAll)
                     visible: root.standardButtons & StandardButton.NoToAll
                 }
-                Button {
+                StyledButton {
                     id: _discardButton
                     text: qsTr("Discard")
                     onClicked: root.click(StandardButton.Discard)
                     visible: root.standardButtons & StandardButton.Discard
                 }
-                Button {
+                StyledButton {
                     id: _resetButton
                     text: qsTr("Reset")
                     onClicked: root.click(StandardButton.Reset)
                     visible: root.standardButtons & StandardButton.Reset
                 }
-                Button {
+                StyledButton {
                     id: _restoreDefaultsButton
                     text: qsTr("Restore Defaults")
                     onClicked: root.click(StandardButton.RestoreDefaults)
                     visible: root.standardButtons & StandardButton.RestoreDefaults
                 }
-                Button {
+                StyledButton {
                     id: _cancelButton
                     text: qsTr("Cancel")
                     onClicked: root.click(StandardButton.Cancel)
                     visible: root.standardButtons & StandardButton.Cancel
                 }
-                Button {
+                StyledButton {
                     id: _abortButton
                     text: qsTr("Abort")
                     onClicked: root.click(StandardButton.Abort)
                     visible: root.standardButtons & StandardButton.Abort
                 }
-                Button {
+                StyledButton {
                     id: _closeButton
                     text: qsTr("Close")
                     onClicked: root.click(StandardButton.Close)
                     visible: root.standardButtons & StandardButton.Close
                 }
-                Button {
+                StyledButton {
                     id: _moreButton
                     text: qsTr("Show Details...")
                     onClicked: _content.state = (_content.state === "" ? "expanded" : "")
                     visible: root.detailedText.length > 0
                 }
-                Button {
+                StyledButton {
                     id: _helpButton
                     text: qsTr("Help")
                     onClicked: root.click(StandardButton.Help)
@@ -282,7 +277,7 @@ AbstractMessageDialog {
                     bottomMargin: _content.defOuterSpacing
                 }
 
-                TextLines {
+                StyledTextEdit {
                     id: _detailedText
                     text: root.detailedText
                     width: _details.width

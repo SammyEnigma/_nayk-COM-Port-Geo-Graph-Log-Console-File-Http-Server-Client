@@ -25,7 +25,9 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.12
 import QtQuick.Dialogs 1.2
+import QtQuick.Window 2.12
 import QtQuick.Controls.Material 2.12
+import Utils 1.0
 import "Style.js" as Style
 
 Dialog {
@@ -41,17 +43,10 @@ Dialog {
     property string applicationUrl: "https://nayk1982.github.io"
     property alias applicationDescription: _descriptionEdit.text
 
-    contentItem: Pane {
+    contentItem: StyledPane {
         id: _rect
-
-        Material.theme: Style.darkTheme ? Material.Dark : Material.Normal
-        Material.accent: Style.accent
-        Material.primary: Style.primary
-        Material.foreground: Style.foreground
-        Material.background: Style.background
-
-        implicitWidth: 400
-        implicitHeight: 500
+        implicitWidth: Math.min( Screen.desktopAvailableWidth - 40, 480 )
+        implicitHeight: Math.min( Screen.desktopAvailableHeight - 40, 580 )
         anchors.fill: parent
 
         Item {
@@ -82,7 +77,7 @@ Dialog {
                 fillMode: Image.Stretch
             }
 
-            TextLabel {
+            StyledText {
                 id: _title
                 height: parent.height
 
@@ -117,7 +112,7 @@ Dialog {
             spacing: 10
             visible: _textVersion.text !== ""
 
-            TextLabel {
+            StyledText {
                 id: _labelVersion
                 width: 10 + Math.max( contentWidth, _labelDate.contentWidth, _labelAuthor.contentWidth, _labelMail.contentWidth, _labelUrl.contentWidth )
                 height: contentHeight * 1.6
@@ -126,7 +121,7 @@ Dialog {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            TextLabel {
+            StyledText {
                 id: _textVersion
                 width: 10 + Math.max( contentWidth, _textDate.contentWidth, _textAuthor.contentWidth, _textMail.contentWidth, _textUrl.contentWidth )
                 height: _labelVersion.height
@@ -149,7 +144,7 @@ Dialog {
             spacing: 10
             visible: _textDate.text !== ""
 
-            TextLabel {
+            StyledText {
                 id: _labelDate
                 width: _labelVersion.width
                 height: _labelVersion.height
@@ -158,7 +153,7 @@ Dialog {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            TextLabel {
+            StyledText {
                 id: _textDate
                 width: _textVersion.width
                 height: _labelVersion.height
@@ -181,7 +176,7 @@ Dialog {
             spacing: 10
             visible: _textAuthor.text !== ""
 
-            TextLabel {
+            StyledText {
                 id: _labelAuthor
                 width: _labelVersion.width
                 height: _labelVersion.height
@@ -190,7 +185,7 @@ Dialog {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            TextLabel {
+            StyledText {
                 id: _textAuthor
                 width: _textVersion.width
                 height: _labelVersion.height
@@ -213,7 +208,7 @@ Dialog {
             spacing: 10
             visible: root.applicationMail !== ""
 
-            TextLabel {
+            StyledText {
                 id: _labelMail
                 width: _labelVersion.width
                 height: _labelVersion.height
@@ -222,7 +217,7 @@ Dialog {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            TextLabel {
+            StyledText {
                 id: _textMail
                 width: _textVersion.width
                 height: _labelVersion.height
@@ -258,7 +253,7 @@ Dialog {
             spacing: 10
             visible: root.applicationUrl !== ""
 
-            TextLabel {
+            StyledText {
                 id: _labelUrl
                 width: _labelVersion.width
                 height: _labelVersion.height
@@ -267,7 +262,7 @@ Dialog {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            TextLabel {
+            StyledText {
                 id: _textUrl
                 width: _textVersion.width
                 height: _labelVersion.height
@@ -309,7 +304,7 @@ Dialog {
             readOnly: true
         }
 
-        OkButton {
+        StyledButtonOk {
             id: _btn
 
             anchors {

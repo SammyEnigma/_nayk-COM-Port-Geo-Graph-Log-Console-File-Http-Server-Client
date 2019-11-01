@@ -1,18 +1,16 @@
 <RCC>
     <qresource prefix="/">
-        <file>LineEdit.qml</file>
-        <file>YesButton.qml</file>
-        <file>MainWindow.qml</file>
-        <file>TextLabel.qml</file>
-        <file>LineEditOpenFile.qml</file>
+        <file>StyledTextField.qml</file>
+        <file>StyledButtonOk.qml</file>
+        <file>StyledApplicationWindow.qml</file>
+        <file>StyledText.qml</file>
+        <file>StyledTextFieldOpenFile.qml</file>
         <file>Style.js</file>
-        <file>DialogAbout.qml</file>
-        <file>NoButton.qml</file>
-        <file>CancelButton.qml</file>
-        <file>OkButton.qml</file>
-        <file>PushButton.qml</file>
+        <file>StyledAboutDialog.qml</file>
+        <file>StyledButtonCancel.qml</file>
+        <file>StyledButton.qml</file>
         <file>Utils.qml</file>
-        <file>DialogMessage.qml</file>
+        <file>StyledMessageDialog.qml</file>
         <file>images/cancel.png</file>
         <file>images/critical.png</file>
         <file>images/info.png</file>
@@ -20,6 +18,7 @@
         <file>images/ok.png</file>
         <file>images/question.png</file>
         <file>images/warning.png</file>
-        <file>TextLines.qml</file>
+        <file>StyledTextEdit.qml</file>
+        <file>StyledPane.qml</file>
     </qresource>
 </RCC>
