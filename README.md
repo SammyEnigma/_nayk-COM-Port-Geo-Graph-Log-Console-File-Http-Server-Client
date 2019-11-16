@@ -1,5 +1,6 @@
-# _nayk
-Common classes for Qt projects
+# _nayk (old)
+Common classes for Qt projects - deprecated!!!
 
 :ru: В этом каталоге содержится библиотека классов, используемая в разных проектах.
+Внимание! Проект устаревший, не рекомендуется использовать!!!
 
